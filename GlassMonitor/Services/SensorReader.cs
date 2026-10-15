@@ -22,20 +22,23 @@ internal sealed class SensorReader : IDisposable
 {
     private readonly Computer _computer;
     private readonly DriveReader _drives = new();
+    private readonly DemoDrives? _demoDrives;
 
     private MemoryModules _modules;
     private IHardware? _cpu;
     private IHardware? _gpu;
     private IHardware? _board;
 
-    public SensorReader(bool memoryTemperature)
+    /// <param name="demoDisks">--demo-disks の台数。指定したときは実際のディスクを読まず、ダミーのディスクを表示する。</param>
+    public SensorReader(bool memoryTemperature, int? demoDisks)
     {
+        _demoDrives = demoDisks is int count ? new DemoDrives(count) : null;
         _computer = new Computer
         {
             IsCpuEnabled = true,
             IsGpuEnabled = true,
             IsMotherboardEnabled = true,   // SuperIO（LPC）の CPU ファン
-            IsStorageEnabled = true,
+            IsStorageEnabled = _demoDrives is null,
             IsMemoryEnabled = memoryTemperature,
             IsControllerEnabled = false,
             IsPsuEnabled = false,
@@ -81,7 +84,7 @@ internal sealed class SensorReader : IDisposable
         foreach (var dimm in dimms)
             dimm.Update();
 
-        var (drives, availableDrives) = _drives.Read(hardware, selectedDrives);
+        var (drives, availableDrives) = _demoDrives?.Read(selectedDrives) ?? _drives.Read(hardware, selectedDrives);
 
         return new HardwareSnapshot(
             ReadCpu(_cpu, _board),

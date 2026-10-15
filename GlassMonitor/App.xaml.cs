@@ -31,6 +31,9 @@ public partial class App : Application
 
         var options = StartupOptions.Parse(e.Args);
         var settings = options.ScreenshotPath is null ? SettingsStore.Load() : ScreenshotMode.CreateSettings();
+        // ダミーのディスクを表示している間は、ドライブの選択などを利用者の設定に保存しない
+        if (options.DemoDisks is not null)
+            SettingsStore.IsReadOnly = true;
         // 画面を作る前に言語を決める（--lang はこの起動だけ上書きし、設定には保存しない）
         Localizer.SetLanguage(options.Language ?? settings.Language);
 
@@ -43,7 +46,7 @@ public partial class App : Application
         screenshot?.Start();
 
         // センサーはワーカーで読み、UI スレッドで反映する
-        var monitor = new HardwareMonitorService(settings.MemoryTemperature) { SelectedDrives = settings.SelectedDrives };
+        var monitor = new HardwareMonitorService(settings.MemoryTemperature, options.DemoDisks) { SelectedDrives = settings.SelectedDrives };
         monitor.SnapshotAvailable += snapshot =>
         {
             if (Dispatcher.HasShutdownStarted)

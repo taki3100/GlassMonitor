@@ -22,6 +22,7 @@ A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memor
 | ストレージ | 物理ディスクを最大 4 台表示。1 台なら詳細表示（使用容量、温度、使用中 / 空き、健康状態、読込・書込速度の 2 本線グラフ、アクティブ時間）、2〜4 台なら台数で等分したカード表示（ドライブ文字とボリュームラベル、型番と種類、温度、容量バー、読込 / 書込、健康状態） |
 
 - ストレージは物理ディスク単位で表示し、パーティションが複数あればドライブ文字を並べます（例：`D: E:`）。空き容量が 10% 未満になると容量バーがオレンジになり「空き少」と表示します。健康状態は SSD なら寿命（%）、寿命の取れない HDD などは SMART の状態（良好 / 注意）です。5 台以上あるときは、表示する 4 台を設定で選べます
+- USB メモリなど、一部の外付けドライブは表示されません
 - 1 秒ごとに更新し、直近 60 秒をグラフで表示
 - 温度は色と文字（適温 / 高め / 高温）で表示。しきい値は「CPU・GPU・メモリ」と「SSD」で別々に設定できます
 - 取得できないセンサーは「—」と表示
@@ -175,6 +176,7 @@ Free code signing provided by [SignPath.io](https://about.signpath.io), certific
 | Storage | Up to 4 physical disks. With one disk: detailed view (used space, temperature, used / free, health, read & write throughput as a two-line graph, active time). With 2–4 disks: equally sized cards (drive letters and volume label, model and type, temperature, capacity bar, read / write, health) |
 
 - Storage is shown per physical disk; disks with several partitions list all drive letters (e.g. `D: E:`). When free space drops below 10%, the capacity bar turns orange and shows "Low space". Health is the remaining life (%) for SSDs and the SMART status (good / caution) for HDDs and other drives without a life value. With 5 or more disks, you choose which 4 to show in the settings
+- Some external drives, such as USB flash drives, are not shown
 - Updates every second with a 60-second history graph
 - Temperatures are shown with color and a label (normal / warm / hot). Thresholds can be set separately for CPU/GPU/memory and for SSDs
 - Sensors that cannot be read are shown as "—"

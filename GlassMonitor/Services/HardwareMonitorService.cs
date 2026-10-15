@@ -6,7 +6,8 @@ namespace GlassMonitor.Services;
 /// バックグラウンドで 1 秒ごとにセンサーを読み取り、<see cref="SnapshotAvailable"/> で通知する。
 /// LibreHardwareMonitor の操作はすべてこのワーカー上で行う。
 /// </summary>
-public sealed class HardwareMonitorService(bool memoryTemperature) : IDisposable
+/// <param name="demoDisks">--demo-disks の台数（通常は null）。</param>
+public sealed class HardwareMonitorService(bool memoryTemperature, int? demoDisks = null) : IDisposable
 {
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
 
@@ -36,7 +37,7 @@ public sealed class HardwareMonitorService(bool memoryTemperature) : IDisposable
 
     private async Task RunAsync(CancellationToken ct)
     {
-        using var reader = new SensorReader(_memoryTemperature);
+        using var reader = new SensorReader(_memoryTemperature, demoDisks);
         try
         {
             // PawnIO ドライバーの読み込みなどで数秒かかることがある

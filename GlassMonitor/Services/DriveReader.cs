@@ -31,7 +31,7 @@ internal sealed class DriveReader
             .ToList();
 
         var readings = new List<DriveReading>();
-        foreach (var drive in Choose(drives, selectedKeys))
+        foreach (var drive in Choose(drives, d => d.Key, selectedKeys))
         {
             drive.Device.Update();
             readings.Add(ReadDrive(drive));
@@ -106,12 +106,13 @@ internal sealed class DriveReader
         return storage.IsSSD ? "SATA SSD" : "HDD";
     }
 
-    private static IEnumerable<Drive> Choose(List<Drive> drives, IReadOnlyCollection<string> selectedKeys)
+    /// <summary>表示するディスクを選ぶ。4 台以下なら全部、5 台以上なら設定で選んだもの（無ければ先頭の 4 台）。</summary>
+    internal static IEnumerable<T> Choose<T>(IReadOnlyList<T> drives, Func<T, string> keyOf, IReadOnlyCollection<string> selectedKeys)
     {
         if (drives.Count <= MaxDisplayed)
             return drives;
 
-        var selected = drives.Where(d => selectedKeys.Contains(d.Key)).Take(MaxDisplayed).ToList();
+        var selected = drives.Where(d => selectedKeys.Contains(keyOf(d))).Take(MaxDisplayed).ToList();
         return selected.Count > 0 ? selected : drives.Take(MaxDisplayed);
     }
 

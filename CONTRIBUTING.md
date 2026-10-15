@@ -37,6 +37,7 @@ The user interface is available in English and Japanese. Translations into other
    dotnet build GlassMonitor.slnx -c Release
    ```
    Then start `GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe --lang de` and look at the tiles, the status bar, the settings panel and the dialogs (turning on "Start at sign-in" shows a confirmation, which you can cancel). `--lang` changes the language only for that run; your settings are not changed.
+   To check the storage cards and the drive selection in the settings, which appear only with 2 or more and 5 or more disks, add `--demo-disks <2-5>`. It shows that many dummy disks instead of your real disks, and does not save any settings during that run.
 6. Update the sentence about the available languages in the README (both the Japanese and the English sections).
 7. (Optional) Take a screenshot as described below.
 8. Open a pull request.
@@ -105,6 +106,7 @@ Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '-
    dotnet build GlassMonitor.slnx -c Release
    ```
    `GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe --lang de` で起動し、タイル、ステータスバー、設定画面、ダイアログ（「サインイン時に自動起動」を ON にすると確認が出ます。キャンセルできます）を確認します。`--lang` はその起動だけ言語を切り替え、設定は変えません。
+   ディスクが 2 台以上・5 台以上のときだけ表示されるストレージのカード表示や設定画面のドライブ選択は、`--demo-disks <2〜5>` を付けると確認できます。実際のディスクの代わりにその台数のダミーのディスクを表示し、その起動では設定を保存しません。
 6. README の対応言語の記載（日本語と英語の両方）を更新します。
 7. （任意）下の手順でスクリーンショットを撮ります。
 8. プルリクエストを送ってください。
