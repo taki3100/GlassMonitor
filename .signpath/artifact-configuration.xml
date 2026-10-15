@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SignPath の artifact configuration の例（SignPath の Web 画面でプロジェクトに設定する。リポジトリから自動では読み込まれない）。
+  GitHub Actions の upload-artifact が作る zip の中身は GlassMonitor/ フォルダー。
+  このプロジェクトのソースからビルドしたファイルだけを署名し、サードパーティの DLL や .NET ランタイムは署名しない。
+  製品名とバージョンを照合し、別のバイナリが署名されないようにする（version はワークフローから渡す）。
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <parameters>
+    <parameter name="version" required="true" />
+  </parameters>
+  <zip-file>
+    <directory path="GlassMonitor">
+      <pe-file path="GlassMonitor.exe" product-name="GlassMonitor" product-version="${version}">
+        <authenticode-sign />
+      </pe-file>
+      <pe-file path="GlassMonitor.dll" product-name="GlassMonitor" product-version="${version}">
+        <authenticode-sign />
+      </pe-file>
+    </directory>
+  </zip-file>
+</artifact-configuration>

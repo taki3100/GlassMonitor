@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>GlassMonitor</RootNamespace>
+    <AssemblyName>GlassMonitor</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <!--
+    ファイルのメタデータ。SignPath の署名ポリシーで製品名・バージョンを照合するため、
+    Product はプロジェクト名と同じにし、ProductVersion（InformationalVersion）にコミットハッシュを付けない。
+    リリースビルドでは CI がタグから -p:Version=1.2.3 を渡す。
+  -->
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Product>GlassMonitor</Product>
+    <AssemblyTitle>GlassMonitor</AssemblyTitle>
+    <Description>Hardware monitor for Windows with a Liquid Glass style UI</Description>
+    <Authors>taki3100</Authors>
+    <Company>taki3100</Company>
+    <Copyright>Copyright (c) 2026 taki3100</Copyright>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <SatelliteResourceLanguages>en;ja</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+  </ItemGroup>
+
+</Project>

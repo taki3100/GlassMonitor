@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+*.zip
+*.sha256
+
+# Design mock-ups (kept locally, not published)
+/mock*.png
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo

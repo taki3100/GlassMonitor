@@ -1,0 +1,168 @@
+# タグ（v1.2.3 形式）を push すると、win-x64 の self-contained ビルドを作って Releases に公開する。
+#
+# 構成: build → (sign) → release
+#   build   : ビルドして、署名前のファイルを actions/upload-artifact でアーティファクトとして保存する
+#   sign    : SignPath に署名を依頼する（SignPath Foundation の承認後に、下のコメントを外して有効化）
+#   release : アーティファクトを zip にして GitHub Releases にアップロードする
+#
+# 署名を有効にする手順
+#   1. リポジトリの Settings → Secrets and variables → Actions で以下を登録する
+#        Secret   SIGNPATH_API_TOKEN       : SignPath の API トークン（Submitter 権限）
+#        Variable SIGNPATH_ORGANIZATION_ID : SignPath の Organization ID
+#   2. 下の sign ジョブのコメントを外し、project-slug / signing-policy-slug を SignPath 側の設定に合わせる
+#   3. release ジョブの needs と ARTIFACT_ID を「署名を有効にしたら」のコメントどおりに変える
+#   SignPath の artifact configuration の例は .signpath/artifact-configuration.xml にある。
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+env:
+  PROJECT: GlassMonitor/GlassMonitor.csproj
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build (win-x64, self-contained)
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Get version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".Substring(1)
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+            throw "Tag must look like v1.2.3: ${{ github.ref_name }}"
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Publish
+        shell: pwsh
+        run: >
+          dotnet publish $env:PROJECT
+          --configuration Release
+          --runtime win-x64
+          --self-contained true
+          -p:Version=${{ steps.version.outputs.version }}
+          --output publish/GlassMonitor
+
+      - name: Add license and documentation files
+        shell: pwsh
+        run: |
+          Copy-Item LICENSE, THIRD-PARTY-NOTICES.md, README.md, CODE_SIGNING_POLICY.md -Destination publish/GlassMonitor
+          Copy-Item licenses -Destination publish/GlassMonitor -Recurse
+
+      # 署名前のビルド。SignPath はこのアーティファクトの ID を受け取って署名する
+      # （SignPath の artifact configuration のルートは zip-file。中身は GlassMonitor/ フォルダー）。
+      - name: Upload unsigned build
+        id: upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: GlassMonitor-${{ steps.version.outputs.version }}-win-x64-unsigned
+          path: publish/
+          if-no-files-found: error
+
+  # ===== コード署名（SignPath Foundation の承認後にコメントを外す） =====
+  # sign:
+  #   name: Sign (SignPath)
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     artifact-id: ${{ steps.upload-signed.outputs.artifact-id }}
+  #   steps:
+  #     - name: Submit signing request
+  #       uses: signpath/github-action-submit-signing-request@v3
+  #       with:
+  #         api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+  #         organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+  #         project-slug: GlassMonitor
+  #         signing-policy-slug: release-signing
+  #         github-artifact-id: ${{ needs.build.outputs.artifact-id }}
+  #         wait-for-completion: true
+  #         # 署名リクエストは手動承認が必要。承認までの待ち時間（秒）
+  #         wait-for-completion-timeout-in-seconds: 3600
+  #         output-artifact-directory: signed
+  #         parameters: |
+  #           version: ${{ toJSON(needs.build.outputs.version) }}
+  #
+  #     - name: Upload signed build
+  #       id: upload-signed
+  #       uses: actions/upload-artifact@v7
+  #       with:
+  #         name: GlassMonitor-${{ needs.build.outputs.version }}-win-x64-signed
+  #         path: signed/
+  #         if-no-files-found: error
+
+  release:
+    name: Publish to GitHub Releases
+    # 署名を有効にしたら: needs: [build, sign]
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+      # 署名を有効にしたら: ${{ needs.sign.outputs.artifact-id }}
+      ARTIFACT_ID: ${{ needs.build.outputs.artifact-id }}
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ env.ARTIFACT_ID }}
+          path: dist
+
+      - name: Create zip and checksum
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem dist -Recurse -Filter GlassMonitor.exe | Select-Object -First 1
+          if (-not $exe) { throw "GlassMonitor.exe not found in the artifact" }
+          $zip = "GlassMonitor-$env:VERSION-win-x64.zip"
+          # zip のルートを GlassMonitor/ フォルダーにする
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          [System.IO.Compression.ZipFile]::CreateFromDirectory(
+            $exe.Directory.FullName, (Join-Path $PWD $zip),
+            [System.IO.Compression.CompressionLevel]::Optimal, $true)
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $zip" | Set-Content "$zip.sha256" -Encoding ascii -NoNewline
+          "ZIP=$zip" >> $env:GITHUB_ENV
+
+      - name: Create release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $notes = @"
+          ## GlassMonitor $env:VERSION
+
+          - Download: ``$env:ZIP`` (Windows x64, self-contained). Verify it with the ``.sha256`` file.
+          - Requires administrator rights and [PawnIO](https://pawnio.eu/) for CPU temperature and other low-level sensors.
+          - [Code signing policy](https://github.com/${{ github.repository }}/blob/main/CODE_SIGNING_POLICY.md)
+
+          "@
+          Set-Content notes.md $notes -Encoding utf8
+          # 0.x の間は Pre-release として公開する
+          $extra = @()
+          if ($env:VERSION.StartsWith("0.")) { $extra += "--prerelease" }
+          gh release create "${{ github.ref_name }}" $env:ZIP "$env:ZIP.sha256" `
+            --repo "${{ github.repository }}" `
+            --title "GlassMonitor $env:VERSION" `
+            --notes-file notes.md `
+            --generate-notes `
+            --verify-tag `
+            @extra

@@ -1,0 +1,96 @@
+name: アンチチート互換性の報告 / Anti-cheat compatibility report
+description: ゲームのアンチチートと GlassMonitor を一緒に使ったときの結果を報告してください。 / Tell us how GlassMonitor worked together with a game's anti-cheat.
+title: "[互換性] <ゲーム名> / <アンチチート名>"
+labels: ["anti-cheat-compat"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご協力ありがとうございます。結果は README の「アンチチートとの互換性」に反映します。
+        GlassMonitor と PawnIO のバージョンは、GlassMonitor の設定画面のいちばん下に表示されます。
+        アカウントの情報やスクリーンショットに写った個人情報は載せないでください。
+
+        Thank you! Results are reflected in the "Anti-cheat compatibility" section of the README.
+        The GlassMonitor and PawnIO versions are shown at the bottom of the settings panel.
+        Please do not include account details or personal information.
+
+  - type: input
+    id: game
+    attributes:
+      label: ゲーム名 / Game
+      placeholder: "例 / e.g. Apex Legends"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: anticheat
+    attributes:
+      label: アンチチート / Anti-cheat
+      options:
+        - Easy Anti-Cheat
+        - BattlEye
+        - Riot Vanguard
+        - FACEIT AC
+        - EA Javelin Anticheat
+        - その他（下に記入） / Other (write below)
+    validations:
+      required: true
+
+  - type: input
+    id: anticheat-other
+    attributes:
+      label: その他のアンチチート名 / Other anti-cheat
+      description: 上で「その他」を選んだ場合に記入してください。 / Fill in if you chose "Other" above.
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: 結果 / Result
+      options:
+        - 問題なく両方使えた / Both worked normally
+        - GlassMonitor が「CPUセンサー制限モード」になった / GlassMonitor switched to CPU sensor limited mode
+        - ゲームが起動しなかった、または警告が出た / The game did not start or showed a warning
+        - ゲーム中に切断・キックされた / Disconnected or kicked during the game
+        - その他（詳細に記入） / Other (describe below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: 詳細 / Details
+      description: 表示されたメッセージ、起きたことなど。 / Messages shown, what happened, etc.
+
+  - type: input
+    id: glassmonitor-version
+    attributes:
+      label: GlassMonitor のバージョン / GlassMonitor version
+      placeholder: "例 / e.g. 0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: pawnio-version
+    attributes:
+      label: PawnIO のバージョン / PawnIO version
+      placeholder: "例 / e.g. 2.2.0、未インストール / not installed"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: launch-order
+    attributes:
+      label: 起動した順番 / Launch order
+      options:
+        - GlassMonitor を先に起動してからゲームを起動 / GlassMonitor first, then the game
+        - ゲームを先に起動してから GlassMonitor を起動 / The game first, then GlassMonitor
+        - GlassMonitor はサインイン時に自動起動 / GlassMonitor started at sign-in
+        - GlassMonitor は起動していない（PawnIO だけ） / GlassMonitor not running (PawnIO only)
+    validations:
+      required: true
+
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows のバージョン / Windows version
+      placeholder: "例 / e.g. Windows 11 24H2"

@@ -1,0 +1,331 @@
+<Window x:Class="GlassMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:GlassMonitor.Controls"
+        xmlns:vm="clr-namespace:GlassMonitor.ViewModels"
+        Title="GlassMonitor"
+        Width="960" Height="850" MinWidth="900" MinHeight="760"
+        WindowStyle="None" ResizeMode="CanResize"
+        Background="Transparent"
+        Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="{StaticResource UiFont}"
+        Icon="{StaticResource AppIconImage}"
+        Topmost="{Binding Topmost}"
+        UseLayoutRounding="True">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="60" ResizeBorderThickness="6" GlassFrameThickness="-1"
+                      CornerRadius="0" UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <!-- 確認ダイアログ -->
+        <DataTemplate DataType="{x:Type vm:ConfirmDialogViewModel}">
+            <Border Width="460" Style="{StaticResource DialogCard}">
+                <StackPanel>
+                    <TextBlock FontSize="16" FontWeight="Bold" TextWrapping="Wrap" Text="{Binding Title}" />
+                    <TextBlock Margin="0,12,0,0" FontSize="12.5" LineHeight="20" TextWrapping="Wrap"
+                               Style="{StaticResource SecondaryText}" Text="{Binding Message}" />
+                    <StackPanel Margin="0,22,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Margin="0,0,8,0" Style="{StaticResource DialogButton}" IsCancel="True"
+                                Content="{Binding CancelText}" Command="{Binding CancelCommand}"
+                                Visibility="{Binding CancelText, Converter={StaticResource EmptyToCollapsed}}" />
+                        <Button Style="{StaticResource AccentDialogButton}" IsDefault="True"
+                                Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <!-- PawnIO 未インストール時の案内 -->
+        <DataTemplate DataType="{x:Type vm:PawnIoGuideViewModel}">
+            <Border Width="520" Style="{StaticResource DialogCard}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <c:GlyphIcon Width="20" Height="20" Foreground="{StaticResource TempWarmBrush}"
+                                     Data="{StaticResource IconWarning}" />
+                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"
+                                   Text="{Binding Title}" />
+                    </StackPanel>
+                    <TextBlock Margin="0,12,0,0" FontSize="12.5" LineHeight="20" TextWrapping="Wrap"
+                               Style="{StaticResource SecondaryText}" Text="{Binding Description}" />
+                    <TextBlock Margin="0,6,0,0" FontSize="11.5" Style="{StaticResource SecondaryText}"
+                               Text="{Binding InstalledVersionText}"
+                               Visibility="{Binding InstalledVersionText, Converter={StaticResource EmptyToCollapsed}}" />
+
+                    <TextBlock Margin="0,18,0,8" FontSize="13" FontWeight="SemiBold" Text="{Binding StepsTitle}" />
+                    <TextBlock FontSize="12.5" LineHeight="19" TextWrapping="Wrap" Text="{Binding FirstStep}" />
+                    <StackPanel Margin="18,8,0,0" Orientation="Horizontal">
+                        <Button Margin="0,0,8,0" Style="{StaticResource DialogButton}" Content="公式サイト（pawnio.eu）"
+                                Command="{Binding OpenSiteCommand}" />
+                        <Button Style="{StaticResource DialogButton}" Content="GitHub のリリース"
+                                Command="{Binding OpenReleasesCommand}" />
+                    </StackPanel>
+                    <TextBlock Margin="18,12,0,6" FontSize="12" Style="{StaticResource SecondaryText}"
+                               Text="{Binding WingetHint}" />
+                    <DockPanel Margin="18,0,0,0">
+                        <Button DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="64" Style="{StaticResource DialogButton}"
+                                Content="コピー" Command="{Binding CopyWingetCommand}" />
+                        <Border Height="34" Padding="10,0" CornerRadius="10" Background="#33000000"
+                                BorderBrush="#26FFFFFF" BorderThickness="1">
+                            <TextBlock VerticalAlignment="Center" FontFamily="Cascadia Mono, Consolas" FontSize="12"
+                                       Text="{Binding Winget, Mode=OneWay}" />
+                        </Border>
+                    </DockPanel>
+                    <TextBlock Margin="0,14,0,0" FontSize="12.5" TextWrapping="Wrap" Text="{Binding LastStep}" />
+
+                    <DockPanel Margin="0,22,0,0">
+                        <Button DockPanel.Dock="Right" Style="{StaticResource AccentDialogButton}"
+                                IsCancel="True" IsDefault="True" Content="閉じる" Command="{Binding CloseCommand}" />
+                        <!-- 未インストールのときだけ、起動時に表示するかを選べる -->
+                        <CheckBox Width="210" HorizontalAlignment="Left" Style="{StaticResource ToggleSwitch}"
+                                  Content="起動時にこの案内を表示" IsChecked="{Binding ShowOnStartup}"
+                                  Visibility="{Binding IsNotInstalled, Converter={StaticResource BoolToVisibility}}" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid x:Name="RootGrid">
+        <!-- Acrylic の上に重ねる色味と、ほのかなグロー -->
+        <Rectangle Fill="{StaticResource WindowTintBrush}" IsHitTestVisible="False" />
+        <Grid IsHitTestVisible="False" Visibility="{Binding AmbientGlow, Converter={StaticResource BoolToVisibility}}">
+            <Rectangle Fill="{StaticResource GlowWarmBrush}" />
+            <Rectangle Fill="{StaticResource GlowTealBrush}" />
+            <Rectangle Fill="{StaticResource GlowBlueBrush}" />
+            <Rectangle Fill="{StaticResource GlowVioletBrush}" />
+        </Grid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="61" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- ===== タイトルバー ===== -->
+            <DockPanel Margin="18,10,11,0" VerticalAlignment="Top">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <ToggleButton Style="{StaticResource ChromeToggleButton}" ToolTip="常に最前面"
+                                  IsChecked="{Binding Topmost}">
+                        <c:GlyphIcon Width="17" Height="17" Data="{StaticResource IconPin}" />
+                    </ToggleButton>
+                    <ToggleButton x:Name="SettingsButton" Margin="7,0,0,0" Style="{StaticResource ChromeToggleButton}"
+                                  ToolTip="設定"
+                                  IsHitTestVisible="{Binding IsOpen, ElementName=SettingsPopup, Converter={StaticResource InverseBool}}">
+                        <c:GlyphIcon Width="17" Height="17" Data="{StaticResource IconSliders}" />
+                    </ToggleButton>
+                    <Rectangle Width="1" Height="24" Margin="11,0" Fill="{StaticResource DividerBrush}" />
+                    <Button Style="{StaticResource ChromeButton}" ToolTip="最小化" Click="Minimize_Click">
+                        <c:GlyphIcon Width="16" Height="16" Data="{StaticResource IconMinimize}" />
+                    </Button>
+                    <Button Margin="6,0,0,0" Style="{StaticResource ChromeButton}" ToolTip="最大化" Click="Maximize_Click">
+                        <c:GlyphIcon x:Name="MaximizeIcon" Width="16" Height="16" Data="{StaticResource IconMaximize}" />
+                    </Button>
+                    <Button Margin="6,0,0,0" Style="{StaticResource CloseButton}" ToolTip="閉じる" Click="Close_Click">
+                        <c:GlyphIcon Width="16" Height="16" Data="{StaticResource IconClose}" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="35" Height="35" CornerRadius="10" Style="{StaticResource GlassChip}">
+                        <c:GlyphIcon Width="18" Height="18" Data="{StaticResource IconPulse}" />
+                    </Border>
+                    <StackPanel Margin="11,0,0,0" VerticalAlignment="Center">
+                        <TextBlock FontSize="13.5" FontWeight="Bold" Text="GlassMonitor" />
+                        <TextBlock Margin="0,2,0,0" FontSize="10.5" Style="{StaticResource SecondaryText}"
+                                   Text="{Binding SystemSummary}" />
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- 設定ポップアップ -->
+            <Popup x:Name="SettingsPopup" PlacementTarget="{Binding ElementName=SettingsButton}" Placement="Bottom"
+                   HorizontalOffset="-252" VerticalOffset="-4" StaysOpen="False" AllowsTransparency="True"
+                   PopupAnimation="Fade"
+                   IsOpen="{Binding IsChecked, ElementName=SettingsButton, Mode=TwoWay}">
+                <Border Width="280" Margin="12" Padding="16,14,16,16" CornerRadius="16"
+                        Background="#F21B1A35" BorderBrush="{StaticResource GlassBorderBrush}" BorderThickness="1"
+                        TextElement.Foreground="{StaticResource TextPrimaryBrush}"
+                        TextElement.FontFamily="{StaticResource UiFont}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="24" ShadowDepth="4" Opacity="0.45" Color="Black" />
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock FontSize="13" FontWeight="Bold" Text="設定" />
+
+                        <TextBlock Margin="0,14,0,6" FontSize="11" Style="{StaticResource SecondaryText}" Text="アクセント色" />
+                        <ItemsControl Focusable="False" ItemsSource="{Binding AccentOptions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Margin="0,0,7,0" Style="{StaticResource SwatchButton}"
+                                            Background="{Binding Hex}" ToolTip="{Binding Hex}"
+                                            Command="{Binding DataContext.SelectAccentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Hex}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <DockPanel Margin="0,8,0,0">
+                            <Border Width="30" Height="30" Margin="0,0,8,0" CornerRadius="8"
+                                    Background="{DynamicResource AccentBrush}" />
+                            <TextBox Style="{StaticResource GlassTextBox}"
+                                     Text="{Binding AccentHex, UpdateSourceTrigger=LostFocus}"
+                                     ToolTip="#RRGGBB 形式で入力して Enter"
+                                     KeyDown="TextBox_CommitOnEnter" />
+                        </DockPanel>
+
+                        <Rectangle Height="1" Margin="0,14" Fill="{StaticResource DividerBrush}" />
+
+                        <!-- 温度しきい値: この温度以上で「高め」「高温」 -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="56" />
+                                <ColumnDefinition Width="48" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="11" Style="{StaticResource SecondaryText}" Text="温度のしきい値（℃）" />
+                            <TextBlock Grid.Column="1" Margin="0,0,8,0" HorizontalAlignment="Center" FontSize="11"
+                                       Style="{StaticResource SecondaryText}" Text="高め" />
+                            <TextBlock Grid.Column="2" HorizontalAlignment="Center" FontSize="11"
+                                       Style="{StaticResource SecondaryText}" Text="高温" />
+                        </Grid>
+                        <ItemsControl Focusable="False" ItemsSource="{Binding ThresholdEditors}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="56" />
+                                            <ColumnDefinition Width="48" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock VerticalAlignment="Center" FontSize="12" Text="{Binding Label}" />
+                                        <TextBox Grid.Column="1" Margin="0,0,8,0" Style="{StaticResource ThresholdBox}"
+                                                 ToolTip="この温度以上で「高め」"
+                                                 Text="{Binding WarmText, UpdateSourceTrigger=LostFocus}"
+                                                 KeyDown="TextBox_CommitOnEnter" />
+                                        <TextBox Grid.Column="2" Style="{StaticResource ThresholdBox}"
+                                                 ToolTip="この温度以上で「高温」"
+                                                 Text="{Binding HotText, UpdateSourceTrigger=LostFocus}"
+                                                 KeyDown="TextBox_CommitOnEnter" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Rectangle Height="1" Margin="0,8,0,14" Fill="{StaticResource DividerBrush}" />
+
+                        <CheckBox Style="{StaticResource ToggleSwitch}" Content="常に最前面" IsChecked="{Binding Topmost}" />
+                        <CheckBox Margin="0,10,0,0" Style="{StaticResource ToggleSwitch}" Content="サインイン時に自動起動"
+                                  IsChecked="{Binding AutoStart}" />
+                        <CheckBox Margin="0,10,0,0" Style="{StaticResource ToggleSwitch}" Content="背景のグロー"
+                                  IsChecked="{Binding AmbientGlow}" />
+                        <CheckBox Margin="0,10,0,0" Style="{StaticResource ToggleSwitch}" Content="メモリ温度（SPD）"
+                                  IsChecked="{Binding MemoryTemperature}" />
+                        <TextBlock Margin="0,4,46,0" FontSize="10.5" TextWrapping="Wrap" Style="{StaticResource SecondaryText}"
+                                   Text="SMBus 経由で DIMM を読み取ります。iCUE でメモリのライティングを制御している場合は OFF のままにしてください。" />
+
+                        <!-- ディスクが 5 台以上あるときだけ、表示する 4 台を選ぶ -->
+                        <StackPanel Visibility="{Binding HasDriveChoices, Converter={StaticResource BoolToVisibility}}">
+                            <Rectangle Height="1" Margin="0,14" Fill="{StaticResource DividerBrush}" />
+                            <TextBlock Margin="0,0,0,8" FontSize="11" Style="{StaticResource SecondaryText}"
+                                       Text="表示するドライブ（最大 4 台）" />
+                            <ItemsControl Focusable="False" ItemsSource="{Binding DriveChoices}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Margin="0,0,0,8" Style="{StaticResource ToggleSwitch}"
+                                                  IsChecked="{Binding IsSelected}" IsEnabled="{Binding IsEnabled}">
+                                            <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" Text="{Binding Title}"
+                                                       ToolTip="{Binding Title}" />
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                        <Rectangle Height="1" Margin="0,14,0,10" Fill="{StaticResource DividerBrush}" />
+                        <TextBlock FontSize="10.5" Style="{StaticResource SecondaryText}" Text="{Binding VersionText}" />
+                    </StackPanel>
+                </Border>
+            </Popup>
+
+            <!-- ===== タイル ===== -->
+            <Grid Grid.Row="1" Margin="16,0,16,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.2*" />
+                    <RowDefinition Height="14" />
+                    <RowDefinition Height="1.2*" />
+                    <RowDefinition Height="14" />
+                    <!-- ディスクのカード（2〜4 台）が切れないだけの高さを確保し、足りないときは上のタイルのグラフを縮める -->
+                    <RowDefinition Height="*" MinHeight="196" />
+                </Grid.RowDefinitions>
+
+                <c:MetricTile DataContext="{Binding Cpu}" Icon="{StaticResource IconCpu}" />
+                <c:MetricTile Grid.Column="2" DataContext="{Binding Gpu}" Icon="{StaticResource IconGpu}" />
+                <c:MetricTile Grid.Row="2" DataContext="{Binding Memory}" Icon="{StaticResource IconMemory}" />
+                <c:MetricTile Grid.Row="2" Grid.Column="2" DataContext="{Binding Vram}" Icon="{StaticResource IconLayers}" />
+                <!-- ストレージ: 1 台なら詳細表示、2〜4 台ならカード表示 -->
+                <Grid Grid.Row="4" Grid.ColumnSpan="3"
+                      Visibility="{Binding IsStorageMulti, Converter={StaticResource TrueToCollapsed}}">
+                    <c:StorageTile DataContext="{Binding Storage}" Icon="{StaticResource IconDrive}" />
+                </Grid>
+                <Grid Grid.Row="4" Grid.ColumnSpan="3"
+                      Visibility="{Binding IsStorageMulti, Converter={StaticResource BoolToVisibility}}">
+                    <c:StorageCardsTile DataContext="{Binding StorageDrives}" Icon="{StaticResource IconDrive}" />
+                </Grid>
+            </Grid>
+
+            <!-- ===== フッター ===== -->
+            <Border Grid.Row="2" Height="41" BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,1,0,0">
+                <DockPanel Margin="20,0,20,1" TextElement.FontSize="11">
+                    <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource NumericText}">
+                        <Run Foreground="{StaticResource TextSecondaryBrush}" Text="最終更新" />
+                        <Run Foreground="{StaticResource TextSecondaryBrush}" Text="{Binding LastUpdated, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="6" Height="6" Fill="{DynamicResource AccentBrush}" />
+                        <TextBlock Margin="6,0,20,0" Style="{StaticResource SecondaryText}" Text="1秒ごとに更新" />
+
+                        <c:GlyphIcon Width="12" Height="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                     Data="{StaticResource IconPin}" />
+                        <TextBlock Margin="5,0,20,0" Style="{StaticResource SecondaryText}" Text="{Binding TopmostText}" />
+
+                        <c:GlyphIcon Width="12" Height="12" Foreground="{StaticResource TextSecondaryBrush}"
+                                     Data="{StaticResource IconShield}" />
+                        <TextBlock Margin="5,0,20,0" Style="{StaticResource SecondaryText}" Text="{Binding AdminText}" />
+
+                        <Button Style="{StaticResource LinkButton}" Command="{Binding ShowPawnIoGuideCommand}"
+                                Visibility="{Binding IsCpuSensorLimited, Converter={StaticResource BoolToVisibility}}"
+                                ToolTip="PawnIO が無い、またはブロックされているため、CPU の温度・消費電力やファン回転数を取得できません。クリックで PawnIO の導入方法を表示します。">
+                            <StackPanel Orientation="Horizontal">
+                                <c:GlyphIcon Width="12" Height="12" Foreground="{StaticResource TempWarmBrush}"
+                                             Data="{StaticResource IconWarning}" />
+                                <TextBlock Margin="5,0,0,0" Foreground="{StaticResource TempWarmBrush}" Text="CPUセンサー制限モード" />
+                                <TextBlock Margin="8,0,0,0" Foreground="{StaticResource TempWarmBrush}"
+                                           TextDecorations="Underline" Text="PawnIO の導入方法" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+
+        <!-- ===== ダイアログ（PawnIO の案内・自動起動の確認など） ===== -->
+        <Grid Visibility="{Binding ActiveDialog, Converter={StaticResource NullToCollapsed}}">
+            <Rectangle Fill="#B30A0918" />
+            <ContentControl Margin="24" HorizontalAlignment="Center" VerticalAlignment="Center" Focusable="False"
+                            Content="{Binding ActiveDialog}" />
+        </Grid>
+    </Grid>
+</Window>
