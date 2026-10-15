@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="0.1.1.0" name="GlassMonitor.app" />
+  <assemblyIdentity version="0.2.0.0" name="GlassMonitor.app" />
 
   <!-- センサー（MSR / SuperIO / SPD）へのアクセスに PawnIO を使うため管理者権限で起動する -->
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">

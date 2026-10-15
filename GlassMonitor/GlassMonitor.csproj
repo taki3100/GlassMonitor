@@ -17,7 +17,7 @@
     リリースビルドでは CI がタグから -p:Version=1.2.3 を渡す。
   -->
   <PropertyGroup>
-    <Version>0.1.1</Version>
+    <Version>0.2.0</Version>
     <Product>GlassMonitor</Product>
     <AssemblyTitle>GlassMonitor</AssemblyTitle>
     <Description>Hardware monitor for Windows with a glassmorphism-style UI</Description>
