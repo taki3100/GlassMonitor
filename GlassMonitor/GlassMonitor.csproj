@@ -20,7 +20,7 @@
     <Version>0.1.0</Version>
     <Product>GlassMonitor</Product>
     <AssemblyTitle>GlassMonitor</AssemblyTitle>
-    <Description>Hardware monitor for Windows with a Liquid Glass style UI</Description>
+    <Description>Hardware monitor for Windows with a glassmorphism-style UI</Description>
     <Authors>taki3100</Authors>
     <Company>taki3100</Company>
     <Copyright>Copyright (c) 2026 taki3100</Copyright>

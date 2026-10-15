@@ -1,7 +1,7 @@
 # GlassMonitor
 
-A hardware monitor for Windows with a Liquid Glass style UI — CPU, GPU, memory, VRAM and storage at a glance.
-Liquid Glass 風のデザインで CPU・GPU・メモリ・VRAM・ストレージを一覧できる、Windows 向けのハードウェアモニターです。
+A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memory, VRAM and storage at a glance.
+グラスモーフィズム風のデザインで、CPU・GPU・メモリ・VRAM・ストレージを一画面で確認できる、Windows向けのハードウェアモニターです。
 
 **[日本語](#日本語)** | **[English](#english)** | [Code signing policy](CODE_SIGNING_POLICY.md)
 
