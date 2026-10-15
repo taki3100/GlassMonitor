@@ -1,5 +1,9 @@
 # GlassMonitor
 
+[![Latest release](https://img.shields.io/github/v/release/taki3100/GlassMonitor?include_prereleases&sort=semver)](https://github.com/taki3100/GlassMonitor/releases)
+[![Downloads](https://img.shields.io/github/downloads/taki3100/GlassMonitor/total)](https://github.com/taki3100/GlassMonitor/releases)
+[![License](https://img.shields.io/github/license/taki3100/GlassMonitor)](LICENSE)
+
 A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memory, VRAM and storage at a glance.
 グラスモーフィズム風のデザインで、CPU・GPU・メモリ・VRAM・ストレージを一画面で確認できる、Windows向けのハードウェアモニターです。
 
@@ -9,9 +13,26 @@ A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memor
 
 ## 日本語
 
-![GlassMonitor（日本語の画面）](docs/screenshot-ja.png)
+![GlassMonitor のデモ（日本語）](docs/demo.gif)
 
-### 主な機能
+**[最新版をダウンロード](https://github.com/taki3100/GlassMonitor/releases)**（Windows 11 x64 用の zip。展開して `GlassMonitor.exe` を実行します。[詳しい手順](#ダウンロードと起動)）
+
+- **一画面ですべて確認**：CPU・GPU・メモリ・VRAM・ストレージの使用率、温度、クロック、消費電力を 1 秒ごとに更新し、直近 60 秒をグラフで表示
+- **温度がひと目でわかる**：色と「適温 / 高め / 高温」で表示（しきい値は変更可）。ストレージは健康状態と読み書き速度も表示
+- **グラスモーフィズム風の UI**：Windows 11 の Acrylic 背景、アクセント色、常に最前面。日本語・英語に対応
+
+**安心して使うために**
+
+- オープンソースです（[MIT License](LICENSE)）。ソースコードはすべてこのリポジトリで公開しています
+- ネットワークに接続せず、データを収集・送信しません（[プライバシーポリシー](CODE_SIGNING_POLICY.md#プライバシーポリシー)）
+- VirusTotal で検出 0 件です（[v0.2.0 の GlassMonitor.dll の検査結果](https://www.virustotal.com/gui/file/38a49cc7b64a1d1a7d58819bf5230005f654076af11ba2ee726ae68279865511)）
+
+> [!NOTE]
+> リリースはコード署名をしていないため、初回起動時に SmartScreen の警告（「Windows によって PC が保護されました」）が表示されることがあります。[表示されたときの対処方法](#smartscreen-の警告が出た場合)
+
+### 機能の詳細
+
+![GlassMonitor（日本語の画面）](docs/screenshot-ja.png)
 
 | タイル | 表示内容 |
 |---|---|
@@ -161,9 +182,26 @@ GlassMonitor はネットワークに接続せず、データを収集・送信�
 
 ## English
 
-![GlassMonitor (English UI)](docs/screenshot-en.png)
+![GlassMonitor demo (English UI)](docs/demo-en.gif)
 
-### Features
+**[Download the latest release](https://github.com/taki3100/GlassMonitor/releases)** (a zip for Windows 11 x64: extract it and run `GlassMonitor.exe`. [Details](#download-and-run))
+
+- **Everything on one screen**: load, temperature, clock and power of the CPU, GPU, memory, VRAM and storage, updated every second with a 60-second graph
+- **Temperatures at a glance**: shown with color and a label (normal / warm / hot) using thresholds you can change. Storage also shows health and read / write speed
+- **Glassmorphism-style UI**: Acrylic background on Windows 11, custom accent color, always on top. English and Japanese
+
+**Peace of mind**
+
+- Open source ([MIT License](LICENSE)). All of the source code is in this repository
+- No network connections; no data is collected or sent ([privacy policy](CODE_SIGNING_POLICY.md#privacy-policy))
+- 0 detections on VirusTotal ([scan of GlassMonitor.dll in v0.2.0](https://www.virustotal.com/gui/file/38a49cc7b64a1d1a7d58819bf5230005f654076af11ba2ee726ae68279865511))
+
+> [!NOTE]
+> Releases are not code signed, so Windows SmartScreen may show "Windows protected your PC" on the first start. [What to do](#if-smartscreen-shows-a-warning)
+
+### Features in detail
+
+![GlassMonitor (English UI)](docs/screenshot-en.png)
 
 | Tile | What it shows |
 |---|---|

@@ -1,0 +1,83 @@
+name: バグ報告 / Bug report
+description: GlassMonitor の不具合を報告してください。 / Report a problem with GlassMonitor.
+title: "[バグ] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。GlassMonitor と PawnIO のバージョンは、GlassMonitor の設定画面のいちばん下に表示されます。
+        予期しないエラーは `%LOCALAPPDATA%\GlassMonitor\error.log` に記録されます。あれば、内容を下の「ログ・スクリーンショット」に貼ってください。
+        アンチチートとの互換性は「アンチチート互換性の報告」から報告してください。個人情報は載せないでください。
+
+        Thank you for the report! The GlassMonitor and PawnIO versions are shown at the bottom of the settings panel.
+        Unexpected errors are written to `%LOCALAPPDATA%\GlassMonitor\error.log`. If the file exists, paste its contents under "Logs and screenshots".
+        For anti-cheat compatibility, please use the "Anti-cheat compatibility report" instead. Please do not include personal information.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 起きたこと / What happened
+      description: 表示がおかしい、値が取れない、エラーが出たなど。 / For example, wrong display, missing values or an error message.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順 / Steps to reproduce
+      placeholder: |
+        1. GlassMonitor を起動する / Start GlassMonitor
+        2. …
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した動作 / Expected behavior
+
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows のバージョン / Windows version
+      description: 「設定」→「システム」→「バージョン情報」で確認できます。 / See Settings → System → About.
+      placeholder: "例 / e.g. Windows 11 24H2 (26100.4061)"
+    validations:
+      required: true
+
+  - type: input
+    id: cpu
+    attributes:
+      label: CPU
+      placeholder: "例 / e.g. Intel Core Ultra 7 265K"
+    validations:
+      required: true
+
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU
+      placeholder: "例 / e.g. NVIDIA GeForce RTX 5070 Ti"
+    validations:
+      required: true
+
+  - type: input
+    id: glassmonitor-version
+    attributes:
+      label: GlassMonitor のバージョン / GlassMonitor version
+      placeholder: "例 / e.g. 0.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: pawnio-version
+    attributes:
+      label: PawnIO のバージョン / PawnIO version
+      placeholder: "例 / e.g. 2.2.0、未インストール / not installed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ・スクリーンショット / Logs and screenshots
+      description: error.log の内容や、画面のスクリーンショットを貼ってください（任意）。 / Paste the contents of error.log or attach screenshots (optional).

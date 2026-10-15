@@ -1,0 +1,39 @@
+name: 機能要望 / Feature request
+description: GlassMonitor に欲しい機能を提案してください。 / Suggest a feature for GlassMonitor.
+title: "[要望] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提案ありがとうございます。同じ要望がすでに Issue にないか、先に確認してください。
+
+        Thank you for the suggestion! Please check that the same request has not already been made in the Issues.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 困っていること・やりたいこと / Problem or use case
+      description: どんなときに、何ができなくて困っているかを書いてください。 / Describe when and why you need this.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 提案する機能 / Proposed feature
+      description: どうなってほしいかを書いてください。 / Describe what you would like GlassMonitor to do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: ほかに考えた方法 / Alternatives considered
+      description: 今使っている回避策や、ほかのツールでの例など（任意）。 / Workarounds or examples from other tools (optional).
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 補足 / Additional context
+      description: イメージ図やスクリーンショットなど（任意）。 / Mockups, screenshots, etc. (optional).

@@ -67,6 +67,23 @@ Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '-
 - The screenshot is taken from the screen, including the Acrylic background, so keep the window visible and do not move the mouse over it. The size depends on the display scaling (960 × 850 pixels at 100%).
 - From a terminal that is not running as administrator, GlassMonitor asks for elevation and the working directory may change. Use an absolute path for `--screenshot` in that case.
 
+### Demo GIFs
+
+The top of each language section of the README shows a demo GIF: `docs/demo.gif` (Japanese) and `docs/demo-en.gif` (English). GlassMonitor can record them itself:
+
+```powershell
+# In a terminal running as administrator, from the root of the repository
+dotnet build GlassMonitor.slnx -c Release
+Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang ja --record 10 docs\demo.gif'
+Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang en --record 10 docs\demo-en.gif'
+```
+
+- `--record <seconds> <file.gif>` waits until the graphs have 60 seconds of data (about one minute), records for the given number of seconds (up to 60) and exits. The GIF is 900 pixels wide, about 15 frames per second, and loops. A 10-second GIF is about 200 KB.
+- Only the contents of the GlassMonitor window are recorded. The desktop and other windows, even ones that cover GlassMonitor, are not captured, and mouse-over effects are not shown. The Acrylic background is drawn by Windows outside the window contents, so the GIF uses the solid background that GlassMonitor shows when Acrylic is not available.
+- From 2 to 6 seconds into the recording, GlassMonitor puts a light load on the CPU (a quarter of the logical processors, at low priority) so that the CPU usage and graph change.
+- `--demo-disks 4` shows four dummy disks, so the storage cards look the same on every PC.
+- As with screenshots, exit GlassMonitor first, and your settings are not read or changed.
+
 ---
 
 ## 貢献の方法（日本語）
@@ -135,3 +152,20 @@ Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '-
 - 既定の設定・既定のサイズで画面中央に起動し、グラフが 60 秒分たまるのを待って（約 1 分）、ウィンドウを PNG で保存して終了します。利用者の設定は読み込まず、変更もしません。
 - 画面に表示された状態（Acrylic の背景を含む）を撮るため、ウィンドウを隠したり、マウスをウィンドウの上に置いたりしないでください。画像の大きさは画面の拡大率で変わります（100% で 960 × 850 ピクセル）。
 - 管理者ではないターミナルから実行すると昇格の確認が出て、作業フォルダーが変わることがあります。その場合は `--screenshot` に絶対パスを指定してください。
+
+#### デモ GIF
+
+README の各言語の冒頭には、デモ GIF の `docs/demo.gif`（日本語）と `docs/demo-en.gif`（英語）を載せています。GlassMonitor 自身で録画できます。
+
+```powershell
+# 管理者として実行したターミナルで、リポジトリのルートから実行する
+dotnet build GlassMonitor.slnx -c Release
+Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang ja --record 10 docs\demo.gif'
+Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang en --record 10 docs\demo-en.gif'
+```
+
+- `--record <秒数> <file.gif>` は、グラフが 60 秒分たまるのを待って（約 1 分）、指定した秒数（最大 60 秒）だけ録画して終了します。GIF は横幅 900 ピクセル、約 15 fps で、ループ再生します。10 秒で約 200 KB です。
+- 録画するのは GlassMonitor のウィンドウの中身だけです。デスクトップや他のウィンドウ（GlassMonitor に重なっているものも含む）は写らず、マウスを乗せたときの表示も写りません。Acrylic の背景はウィンドウの中身の外で Windows が描くため、GIF では Acrylic が使えないときと同じ単色の背景になります。
+- 録画の 2〜6 秒目は、CPU の使用率とグラフが動くよう、CPU に軽い負荷をかけます（論理プロセッサーの 1/4 のスレッド、低い優先度）。
+- `--demo-disks 4` でダミーのディスクを 4 台表示するので、どの PC でも同じカード表示になります。
+- スクリーンショットと同じく、先に GlassMonitor を終了してください。利用者の設定は読み込まず、変更もしません。

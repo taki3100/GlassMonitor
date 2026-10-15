@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
+using GlassMonitor.Capture;
 using GlassMonitor.Interop;
 using GlassMonitor.Localization;
 using GlassMonitor.Services;
@@ -30,7 +31,8 @@ public partial class App : Application
         }
 
         var options = StartupOptions.Parse(e.Args);
-        var settings = options.ScreenshotPath is null ? SettingsStore.Load() : ScreenshotMode.CreateSettings();
+        bool capturing = options.ScreenshotPath is not null || options.RecordPath is not null;
+        var settings = capturing ? CaptureMode.CreateSettings() : SettingsStore.Load();
         // ダミーのディスクを表示している間は、ドライブの選択などを利用者の設定に保存しない
         if (options.DemoDisks is not null)
             SettingsStore.IsReadOnly = true;
@@ -42,8 +44,10 @@ public partial class App : Application
         MainWindow = window;
         window.Show();
 
-        var screenshot = options.ScreenshotPath is { } path ? new ScreenshotMode(window, path) : null;
-        screenshot?.Start();
+        CaptureMode? capture = options.RecordPath is { } recordPath
+            ? new RecordingMode(window, options.RecordDuration, recordPath)
+            : options.ScreenshotPath is { } screenshotPath ? new ScreenshotMode(window, screenshotPath) : null;
+        capture?.Start();
 
         // センサーはワーカーで読み、UI スレッドで反映する
         var monitor = new HardwareMonitorService(settings.MemoryTemperature, options.DemoDisks) { SelectedDrives = settings.SelectedDrives };
@@ -53,10 +57,10 @@ public partial class App : Application
                 return;
             Dispatcher.InvokeAsync(() =>
             {
-                if (screenshot?.IsCapturing == true)
+                if (capture?.ShowsSnapshots == false)
                     return;
                 viewModel.Apply(snapshot);
-                screenshot?.OnSnapshotApplied();
+                capture?.OnSnapshotApplied();
             });
         };
         viewModel.PropertyChanged += (_, args) =>
