@@ -153,6 +153,7 @@ jobs:
           - Download: ``$env:ZIP`` (Windows x64, self-contained). Verify it with the ``.sha256`` file.
           - Requires administrator rights and [PawnIO](https://pawnio.eu/) for CPU temperature and other low-level sensors.
           - [Code signing policy](https://github.com/${{ github.repository }}/blob/main/CODE_SIGNING_POLICY.md)
+          - Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
 
           "@
           Set-Content notes.md $notes -Encoding utf8
