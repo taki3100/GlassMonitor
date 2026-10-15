@@ -131,7 +131,7 @@ dotnet build GlassMonitor.slnx -c Release
 配布用と同じ self-contained ビルドを作るには次を実行します。
 
 ```powershell
-dotnet publish GlassMonitor/GlassMonitor.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0 -o publish/GlassMonitor
+dotnet publish GlassMonitor/GlassMonitor.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.1 -o publish/GlassMonitor
 ```
 
 リリースは `v1.2.3` 形式のタグを push すると、GitHub Actions（[release.yml](.github/workflows/release.yml)）がビルドして zip を Releases に公開します。
@@ -278,7 +278,7 @@ Run `GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe` (it requires adm
 To create the same self-contained build as the releases:
 
 ```powershell
-dotnet publish GlassMonitor/GlassMonitor.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.0 -o publish/GlassMonitor
+dotnet publish GlassMonitor/GlassMonitor.csproj -c Release -r win-x64 --self-contained true -p:Version=0.1.1 -o publish/GlassMonitor
 ```
 
 Pushing a tag such as `v1.2.3` makes GitHub Actions ([release.yml](.github/workflows/release.yml)) build the app and publish the zip to Releases.

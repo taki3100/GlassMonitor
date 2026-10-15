@@ -5,7 +5,7 @@ GlassMonitor が、ゲームのアンチチート（Easy Anti-Cheat、BattlEye�
 | 項目 | 内容 |
 |---|---|
 | 点検日 | 2026-10-15 |
-| 対象 | GlassMonitor 0.1.0（`GlassMonitor/` のソースと、win-x64 self-contained の Release ビルド出力 266 ファイル） |
+| 対象 | GlassMonitor 0.1.1（`GlassMonitor/` のソースと、win-x64 self-contained の Release ビルド出力 266 ファイル。点検は 0.1.0 のコードで実施し、0.1.1 での変更は説明文の表記のみ） |
 | 依存ライブラリ | LibreHardwareMonitorLib 0.9.6（ソースはコミット `3d331e3` を確認）、DiskInfoToolkit 1.1.2、RAMSPDToolkit-NDD 1.4.2、BlackSharp.Core 1.0.4、HidSharp 2.6.4 |
 | 点検した環境 | Windows 11 Pro（10.0.26300）、Intel Core Ultra 7 265K、NVIDIA GeForce RTX 5070 Ti、PawnIO 2.2.0 |
 

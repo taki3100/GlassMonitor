@@ -104,7 +104,7 @@ public sealed class MainViewModel : ObservableObject
         private set => SetProperty(ref _isCpuSensorLimited, value);
     }
 
-    /// <summary>"GlassMonitor 0.1.0 · PawnIO 2.2.0"（不具合や互換性の報告用）</summary>
+    /// <summary>"GlassMonitor 0.1.1 · PawnIO 2.2.0"（不具合や互換性の報告用）</summary>
     public string VersionText { get; }
 
     /// <summary>ディスクが 2 台以上ならカード表示、1 台なら詳細表示。</summary>
