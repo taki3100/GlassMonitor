@@ -37,7 +37,9 @@ internal sealed class DriveReader
             readings.Add(ReadDrive(drive));
         }
 
-        var choices = drives.Select(d => new DriveChoice(d.Key, TitleOf(d))).ToList();
+        var choices = drives
+            .Select(d => new DriveChoice(d.Key, d.LettersText, d.Device.Storage.DriveNumber, NameFormatter.Storage(d.Device.Storage.Model)))
+            .ToList();
         return (readings, choices);
     }
 
@@ -75,7 +77,7 @@ internal sealed class DriveReader
             storage.DriveNumber,
             NameFormatter.Storage(storage.Model),
             KindOf(device),
-            drive.Letters.Count > 0 ? string.Join(" ", drive.Letters.Select(c => $"{c}:")) : null,
+            drive.LettersText,
             label,
             Value(temperature),
             total,
@@ -158,14 +160,6 @@ internal sealed class DriveReader
             ? $"{storage.Model?.Trim()}#{storage.DriveNumber}"
             : $"{storage.Model?.Trim()}|{storage.SerialNumber.Trim()}";
 
-    private static string TitleOf(Drive drive)
-    {
-        string letters = drive.Letters.Count > 0
-            ? string.Join(" ", drive.Letters.Select(c => $"{c}:"))
-            : $"ディスク {drive.Device.Storage.DriveNumber}";
-        return $"{letters}  {NameFormatter.Storage(drive.Device.Storage.Model)}";
-    }
-
     private static bool IsCorsair(DiskInfoToolkit.Storage storage) =>
         (storage.Model?.Contains("Corsair", StringComparison.OrdinalIgnoreCase) ?? false)
         || (storage.Vendor?.Contains("Corsair", StringComparison.OrdinalIgnoreCase) ?? false);
@@ -190,5 +184,9 @@ internal sealed class DriveReader
     private static double? Value(ISensor? sensor) =>
         sensor?.Value is float v && float.IsFinite(v) ? v : null;
 
-    private sealed record Drive(StorageDevice Device, string Key, IReadOnlyList<char> Letters);
+    private sealed record Drive(StorageDevice Device, string Key, IReadOnlyList<char> Letters)
+    {
+        /// <summary>"C: D:"（ドライブ文字が無ければ null）。</summary>
+        public string? LettersText => Letters.Count > 0 ? string.Join(" ", Letters.Select(c => $"{c}:")) : null;
+    }
 }

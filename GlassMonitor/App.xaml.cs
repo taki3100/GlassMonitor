@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using GlassMonitor.Interop;
+using GlassMonitor.Localization;
 using GlassMonitor.Services;
 using GlassMonitor.Settings;
 using GlassMonitor.ViewModels;
@@ -28,18 +29,32 @@ public partial class App : Application
             return;
         }
 
-        var settings = SettingsStore.Load();
+        var options = StartupOptions.Parse(e.Args);
+        var settings = options.ScreenshotPath is null ? SettingsStore.Load() : ScreenshotMode.CreateSettings();
+        // 画面を作る前に言語を決める（--lang はこの起動だけ上書きし、設定には保存しない）
+        Localizer.SetLanguage(options.Language ?? settings.Language);
+
         var viewModel = new MainViewModel(settings);
         var window = new MainWindow(viewModel, settings);
         MainWindow = window;
         window.Show();
 
+        var screenshot = options.ScreenshotPath is { } path ? new ScreenshotMode(window, path) : null;
+        screenshot?.Start();
+
         // センサーはワーカーで読み、UI スレッドで反映する
         var monitor = new HardwareMonitorService(settings.MemoryTemperature) { SelectedDrives = settings.SelectedDrives };
         monitor.SnapshotAvailable += snapshot =>
         {
-            if (!Dispatcher.HasShutdownStarted)
-                Dispatcher.InvokeAsync(() => viewModel.Apply(snapshot));
+            if (Dispatcher.HasShutdownStarted)
+                return;
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (screenshot?.IsCapturing == true)
+                    return;
+                viewModel.Apply(snapshot);
+                screenshot?.OnSnapshotApplied();
+            });
         };
         viewModel.PropertyChanged += (_, args) =>
         {

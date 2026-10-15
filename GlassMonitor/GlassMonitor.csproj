@@ -25,6 +25,15 @@
     <Company>taki3100</Company>
     <Copyright>Copyright (c) 2026 taki3100</Copyright>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <!--
+    画面の文字列は Resources/Strings.resx（英語。訳の無いときの既定）と Strings.<コード>.resx（各言語）。
+    言語を追加したら、そのコードを SatelliteResourceLanguages にも足す（WPF 自身の文字列も同じ言語で同梱するため）。
+    手順は CONTRIBUTING.md。
+  -->
+  <PropertyGroup>
+    <NeutralLanguage>en</NeutralLanguage>
     <SatelliteResourceLanguages>en;ja</SatelliteResourceLanguages>
   </PropertyGroup>
 

@@ -1,7 +1,8 @@
 <UserControl x:Class="GlassMonitor.Controls.MetricTile"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:c="clr-namespace:GlassMonitor.Controls">
+             xmlns:c="clr-namespace:GlassMonitor.Controls"
+             xmlns:l="clr-namespace:GlassMonitor.Localization">
     <!-- DataContext: TileViewModel -->
     <ContentControl Style="{StaticResource GlassTile}">
         <Grid>
@@ -21,8 +22,8 @@
                          AccentColor="{DynamicResource AccentColor}" />
 
             <Grid Grid.Row="3">
-                <TextBlock FontSize="10" Style="{StaticResource SecondaryText}" Text="60秒前" />
-                <TextBlock HorizontalAlignment="Right" FontSize="10" Style="{StaticResource SecondaryText}" Text="現在" />
+                <TextBlock FontSize="10" Style="{StaticResource SecondaryText}" Text="{l:Loc Tile_SixtySecondsAgo}" />
+                <TextBlock HorizontalAlignment="Right" FontSize="10" Style="{StaticResource SecondaryText}" Text="{l:Loc Tile_Now}" />
             </Grid>
         </Grid>
     </ContentControl>

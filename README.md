@@ -3,13 +3,13 @@
 A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memory, VRAM and storage at a glance.
 グラスモーフィズム風のデザインで、CPU・GPU・メモリ・VRAM・ストレージを一画面で確認できる、Windows向けのハードウェアモニターです。
 
-**[日本語](#日本語)** | **[English](#english)** | [Code signing policy](CODE_SIGNING_POLICY.md)
-
-![GlassMonitor](docs/screenshot.png)
+**[日本語](#日本語)** | **[English](#english)** | [Code signing policy](CODE_SIGNING_POLICY.md) | [Contributing](CONTRIBUTING.md)
 
 ---
 
 ## 日本語
+
+![GlassMonitor（日本語の画面）](docs/screenshot-ja.png)
 
 ### 主な機能
 
@@ -28,6 +28,8 @@ A hardware monitor for Windows with a glassmorphism-style UI — CPU, GPU, memor
 - 常に最前面、アクセント色の変更、ウィンドウの位置とサイズの保存
 - サインイン時の自動起動（任意）
 - Windows 11 の Acrylic 背景
+
+画面は日本語と英語に対応しています。既定では Windows の表示言語に合わせ（日本語なら日本語、それ以外は英語）、設定で切り替えることもできます。ほかの言語への翻訳も歓迎します（[CONTRIBUTING.md](CONTRIBUTING.md#翻訳)）。
 
 ### 動作環境
 
@@ -81,6 +83,7 @@ zip を展開する前にブロックを解除しておく方法もあります�
 
 - タイトルバーをドラッグして移動します。右上のボタンは左から「常に最前面」「設定」「最小化」「最大化」「閉じる」です。
 - 「設定」では次の項目を変更できます。
+  - 表示言語（自動 / 日本語 / English。「自動」は Windows の表示言語が日本語なら日本語、それ以外は英語）
   - アクセント色（見本から選ぶか `#RRGGBB` で入力して Enter）
   - 温度のしきい値（この温度以上で「高め」「高温」。CPU・GPU・メモリと SSD で別々）
   - 常に最前面 / サインイン時に自動起動 / 背景のグロー / メモリ温度（SPD）
@@ -159,6 +162,8 @@ Free code signing provided by [SignPath.io](https://about.signpath.io), certific
 
 ## English
 
+![GlassMonitor (English UI)](docs/screenshot-en.png)
+
 ### Features
 
 | Tile | What it shows |
@@ -169,7 +174,7 @@ Free code signing provided by [SignPath.io](https://about.signpath.io), certific
 | VRAM | Used / total, free, memory clock, memory controller load |
 | Storage | Up to 4 physical disks. With one disk: detailed view (used space, temperature, used / free, health, read & write throughput as a two-line graph, active time). With 2–4 disks: equally sized cards (drive letters and volume label, model and type, temperature, capacity bar, read / write, health) |
 
-- Storage is shown per physical disk; disks with several partitions list all drive letters (e.g. `D: E:`). When free space drops below 10%, the capacity bar turns orange and shows "空き少" (low space). Health is the remaining life (%) for SSDs and the SMART status (good / caution) for HDDs and other drives without a life value. With 5 or more disks, you choose which 4 to show in the settings
+- Storage is shown per physical disk; disks with several partitions list all drive letters (e.g. `D: E:`). When free space drops below 10%, the capacity bar turns orange and shows "Low space". Health is the remaining life (%) for SSDs and the SMART status (good / caution) for HDDs and other drives without a life value. With 5 or more disks, you choose which 4 to show in the settings
 - Updates every second with a 60-second history graph
 - Temperatures are shown with color and a label (normal / warm / hot). Thresholds can be set separately for CPU/GPU/memory and for SSDs
 - Sensors that cannot be read are shown as "—"
@@ -177,7 +182,7 @@ Free code signing provided by [SignPath.io](https://about.signpath.io), certific
 - Optional start at sign-in
 - Acrylic background on Windows 11
 
-The user interface is currently in Japanese.
+The user interface is available in English and Japanese. By default it follows the Windows display language (Japanese if Windows is in Japanese, English otherwise), and you can change it in the settings. Translations into other languages are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md#translations).
 
 ### Requirements
 
@@ -199,7 +204,7 @@ The user interface is currently in Japanese.
 
 GlassMonitor reads sensors through the [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) library, which uses the open-source **PawnIO** driver to access CPU temperatures, clocks, power and motherboard fan speeds.
 
-If PawnIO is not installed, or is blocked (for example by an anti-cheat), GlassMonitor still starts and runs in **CPU sensor limited mode**: only the values that need PawnIO are shown as "—", and the status bar shows "CPUセンサー制限モード" (CPU sensor limited mode) with a link to the PawnIO installation guide. When PawnIO is not installed, the guide is also shown on start-up (you can turn this off in the guide).
+If PawnIO is not installed, or is blocked (for example by an anti-cheat), GlassMonitor still starts and runs in **CPU sensor limited mode**: only the values that need PawnIO are shown as "—", and the status bar shows "CPU sensor limited mode" with a link to the PawnIO installation guide. When PawnIO is not installed, the guide is also shown on start-up (you can turn this off in the guide).
 
 **Option 1: installer**
 
@@ -231,6 +236,7 @@ Alternatively, unblock the zip before extracting it: right-click the zip → "Pr
 
 - Drag the title bar to move the window. The buttons at the top right are: always on top, settings, minimize, maximize and close.
 - In the settings you can change:
+  - the language (Automatic / 日本語 / English; Automatic uses Japanese if Windows is in Japanese and English otherwise)
   - the accent color (pick a swatch or type `#RRGGBB` and press Enter)
   - temperature thresholds ("warm" and "hot", separately for CPU/GPU/memory and SSDs)
   - always on top / start at sign-in / ambient glow / memory temperature (SPD)
@@ -258,7 +264,7 @@ Reports are welcome. Please use the [anti-cheat compatibility report](https://gi
 
 ### Start at sign-in
 
-When you turn on "start at sign-in" (サインイン時に自動起動) in the settings, GlassMonitor asks for confirmation and then creates a scheduled task named `GlassMonitor` in Task Scheduler. Because GlassMonitor needs administrator rights, the task runs with highest privileges (no UAC prompt at sign-in). Turning the option off deletes the task. If you move the application folder, turn the option on again.
+When you turn on "Start at sign-in" in the settings, GlassMonitor asks for confirmation and then creates a scheduled task named `GlassMonitor` in Task Scheduler. Because GlassMonitor needs administrator rights, the task runs with highest privileges (no UAC prompt at sign-in). Turning the option off deletes the task. If you move the application folder, turn the option on again.
 
 ### Uninstall
 

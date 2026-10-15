@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using GlassMonitor.Localization;
 
 namespace GlassMonitor.Settings;
 
@@ -22,6 +23,10 @@ public sealed class AppSettings
     public const string DefaultAccent = "#9BE7FF";
 
     public WindowBounds? Window { get; set; }
+
+    /// <summary>表示言語。"auto"（OS の表示言語に合わせ、対応していなければ英語）または "ja" / "en" など。</summary>
+    public string Language { get; set; } = Languages.Auto;
+
     public bool Topmost { get; set; }
     public string Accent { get; set; } = DefaultAccent;
     public bool AmbientGlow { get; set; } = true;
@@ -54,6 +59,9 @@ public static class SettingsStore
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 
+    /// <summary>true の間は保存しない（スクリーンショット用の起動で、利用者の設定を書き換えないため）。</summary>
+    public static bool IsReadOnly { get; set; }
+
     public static AppSettings Load()
     {
         var settings = new AppSettings();
@@ -76,6 +84,9 @@ public static class SettingsStore
 
     public static void Save(AppSettings settings)
     {
+        if (IsReadOnly)
+            return;
+
         try
         {
             Directory.CreateDirectory(SettingsDirectory);

@@ -1,7 +1,8 @@
 <UserControl x:Class="GlassMonitor.Controls.StorageCardsTile"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:c="clr-namespace:GlassMonitor.Controls">
+             xmlns:c="clr-namespace:GlassMonitor.Controls"
+             xmlns:l="clr-namespace:GlassMonitor.Localization">
     <!-- DataContext: StorageDrivesViewModel。ディスクが 2〜4 台のとき、横幅を台数で等分したカードを並べる -->
     <ContentControl Style="{StaticResource GlassTile}">
         <Grid>
@@ -81,7 +82,7 @@
                                     <TextBlock DockPanel.Dock="Right" VerticalAlignment="Center" FontSize="12" FontWeight="Bold"
                                                Style="{StaticResource NumericText}" Text="{Binding ThroughputText}" />
                                     <TextBlock VerticalAlignment="Center" FontSize="11" Style="{StaticResource SecondaryText}"
-                                               Text="読込 / 書込" />
+                                               Text="{l:Loc Storage_ReadWrite}" />
                                 </DockPanel>
 
                                 <DockPanel Height="19">
@@ -98,7 +99,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                     <TextBlock VerticalAlignment="Center" FontSize="11" Style="{StaticResource SecondaryText}"
-                                               Text="健康状態" />
+                                               Text="{l:Loc Tile_Health}" />
                                 </DockPanel>
                             </StackPanel>
                         </Border>

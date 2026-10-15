@@ -2,6 +2,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
+using GlassMonitor.Localization;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace GlassMonitor.Services;
@@ -50,7 +51,7 @@ internal static class AutoStartTask
     {
         try
         {
-            string exe = Environment.ProcessPath ?? throw new InvalidOperationException("実行ファイルのパスを取得できません。");
+            string exe = Environment.ProcessPath ?? throw new InvalidOperationException(Localizer.Get("AutoStart_ExePathUnavailable"));
             dynamic folder = Connect().GetFolder(@"\");
             folder.RegisterTask(TaskName, BuildXml(exe), TASK_CREATE_OR_UPDATE, null, null, TASK_LOGON_INTERACTIVE_TOKEN, null);
         }
@@ -92,7 +93,7 @@ internal static class AutoStartTask
     private static dynamic Connect()
     {
         var type = Type.GetTypeFromProgID("Schedule.Service")
-            ?? throw new COMException("タスク スケジューラを利用できません。");
+            ?? throw new COMException(Localizer.Get("AutoStart_TaskSchedulerUnavailable"));
         dynamic service = Activator.CreateInstance(type)!;
         service.Connect();
         return service;
@@ -107,6 +108,7 @@ internal static class AutoStartTask
         string user = SecurityElement.Escape(WindowsIdentity.GetCurrent().Name);
         string command = SecurityElement.Escape($"\"{exe}\"");
         string directory = SecurityElement.Escape(Path.GetDirectoryName(exe) ?? "");
+        string description = SecurityElement.Escape(Localizer.Get("AutoStart_TaskDescription"));
 
         // 電源やアイドルの条件で止まらないようにし、実行時間の上限（既定 72 時間）も外す
         return $"""
@@ -114,7 +116,7 @@ internal static class AutoStartTask
             <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
               <RegistrationInfo>
                 <Author>GlassMonitor</Author>
-                <Description>サインイン時に GlassMonitor を起動します。センサーの読み取りに管理者権限が必要なため、最上位の特権で実行します。</Description>
+                <Description>{description}</Description>
               </RegistrationInfo>
               <Triggers>
                 <LogonTrigger>

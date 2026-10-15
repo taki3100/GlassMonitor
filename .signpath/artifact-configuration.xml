@@ -17,6 +17,10 @@
       <pe-file path="GlassMonitor.dll" product-name="GlassMonitor" product-version="${version}">
         <authenticode-sign />
       </pe-file>
+      <!-- 画面の言語リソース（ja/GlassMonitor.resources.dll など）。言語を追加してもこのままでよい -->
+      <pe-file path="*/GlassMonitor.resources.dll" product-name="GlassMonitor" product-version="${version}" max-matches="unbounded">
+        <authenticode-sign />
+      </pe-file>
     </directory>
   </zip-file>
 </artifact-configuration>

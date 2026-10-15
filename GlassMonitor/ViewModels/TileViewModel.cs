@@ -1,3 +1,4 @@
+using GlassMonitor.Localization;
 using GlassMonitor.Settings;
 
 namespace GlassMonitor.ViewModels;
@@ -10,16 +11,23 @@ public enum TemperatureLevel
     Hot,
 }
 
-public sealed class InfoRow(string label) : ObservableObject
+public sealed class InfoRow(string labelKey) : ObservableObject
 {
-    private string _label = label;
+    private string _labelKey = labelKey;
     private string _value = Format.Missing;
 
-    public string Label
+    /// <summary>項目名のリソースキー。</summary>
+    public string LabelKey
     {
-        get => _label;
-        set => SetProperty(ref _label, value);
+        get => _labelKey;
+        set
+        {
+            if (SetProperty(ref _labelKey, value))
+                OnPropertyChanged(nameof(Label));
+        }
     }
+
+    public string Label => Localizer.Get(_labelKey);
 
     public string Value
     {
@@ -28,15 +36,19 @@ public sealed class InfoRow(string label) : ObservableObject
     }
 }
 
-/// <summary>CPU / GPU / メモリ / VRAM / ストレージの各タイル。</summary>
+/// <summary>
+/// CPU / GPU / メモリ / VRAM / ストレージの各タイル。見出しや項目名はリソースのキーで持ち、
+/// 読み出すときに表示中の言語の文字列にする（言語を切り替えたら RefreshAll で読み直させる）。
+/// </summary>
 public class TileViewModel : ObservableObject
 {
     public const int HistoryLength = 60;
 
     private readonly double?[] _history = new double?[HistoryLength];
 
+    private readonly string _titleKey;
     private string _subtitle = "";
-    private string _primaryLabel;
+    private string _primaryLabelKey;
     private double? _usage;
     private double? _temperature;
     private TemperatureThresholds _thresholds = TemperatureThresholds.ChipDefault;
@@ -46,25 +58,23 @@ public class TileViewModel : ObservableObject
     private TemperatureLevel _temperatureLevel;
     private IReadOnlyList<double?> _historySnapshot;
 
-    public TileViewModel(string title, string primaryLabel, params string[] rowLabels)
+    public TileViewModel(string titleKey, string primaryLabelKey, params string[] rowLabelKeys)
     {
-        Title = title;
-        _primaryLabel = primaryLabel;
-        Rows = rowLabels.Select(l => new InfoRow(l)).ToArray();
+        _titleKey = titleKey;
+        _primaryLabelKey = primaryLabelKey;
+        Rows = rowLabelKeys.Select(k => new InfoRow(k)).ToArray();
         _historySnapshot = (double?[])_history.Clone();
     }
 
-    public string Title { get; }
+    public string Title => Localizer.Get(_titleKey);
 
     /// <summary>大きな数字の見出し（「温度」「使用量」）。</summary>
-    public string PrimaryLabel
-    {
-        get => _primaryLabel;
-        private set => SetProperty(ref _primaryLabel, value);
-    }
+    public string PrimaryLabel => Localizer.Get(_primaryLabelKey);
 
-    /// <summary>リング中央の見出し。</summary>
-    public string UsageLabel { get; init; } = "使用率";
+    /// <summary>リング中央の見出しのリソースキー。</summary>
+    protected string UsageLabelKey { get; init; } = "Tile_Load";
+
+    public string UsageLabel => Localizer.Get(UsageLabelKey);
 
     public IReadOnlyList<InfoRow> Rows { get; }
 
@@ -135,9 +145,9 @@ public class TileViewModel : ObservableObject
 
     public string TemperatureText => TemperatureLevel switch
     {
-        TemperatureLevel.Normal => "適温",
-        TemperatureLevel.Warm => "高め",
-        TemperatureLevel.Hot => "高温",
+        TemperatureLevel.Normal => Localizer.Get("Temperature_Normal"),
+        TemperatureLevel.Warm => Localizer.Get("Temperature_Warm"),
+        TemperatureLevel.Hot => Localizer.Get("Temperature_Hot"),
         _ => "",
     };
 
@@ -174,12 +184,16 @@ public class TileViewModel : ObservableObject
         TemperatureLevel = TemperatureLevel.None;
     }
 
-    /// <summary>大きな数字の見出しとサブ情報の項目名を切り替える。</summary>
-    public void SetLayout(string primaryLabel, params string[] rowLabels)
+    /// <summary>大きな数字の見出しとサブ情報の項目名（リソースキー）を切り替える。</summary>
+    public void SetLayout(string primaryLabelKey, params string[] rowLabelKeys)
     {
-        PrimaryLabel = primaryLabel;
-        for (int i = 0; i < Rows.Count && i < rowLabels.Length; i++)
-            Rows[i].Label = rowLabels[i];
+        if (_primaryLabelKey != primaryLabelKey)
+        {
+            _primaryLabelKey = primaryLabelKey;
+            OnPropertyChanged(nameof(PrimaryLabel));
+        }
+        for (int i = 0; i < Rows.Count && i < rowLabelKeys.Length; i++)
+            Rows[i].LabelKey = rowLabelKeys[i];
     }
 
     public void SetRows(params string[] values)

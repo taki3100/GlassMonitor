@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using GlassMonitor.Localization;
 
 namespace GlassMonitor.ViewModels;
 
@@ -54,24 +55,18 @@ public sealed class PawnIoGuideViewModel(
 
     public bool IsNotInstalled => problem == PawnIoProblem.NotInstalled;
 
-    public string Title => IsNotInstalled ? "PawnIO がインストールされていません" : "PawnIO を利用できません";
+    public string Title => Text("PawnIo_TitleNotInstalled", "PawnIo_TitleUnavailable");
 
-    public string Description => IsNotInstalled
-        ? "GlassMonitor は CPU の温度・クロック・消費電力やマザーボードのファン回転数を読み取るために、オープンソースのドライバー「PawnIO」を使います。PawnIO が無い間は CPU センサー制限モードで動作し、これらの項目は「—」と表示されます。GPU、メモリ、ストレージはそのまま表示できます。"
-        : "PawnIO はインストールされていますが、CPU のセンサーを読み取れませんでした。FACEIT などのアンチチートが PawnIO をブロックしている場合や、ドライバーが読み込まれていない場合に起こります。CPU センサー制限モードで動作し、CPU の温度・クロック・消費電力とファン回転数は「—」と表示されます。GPU、メモリ、ストレージはそのまま表示できます。";
+    public string Description => Text("PawnIo_DescriptionNotInstalled", "PawnIo_DescriptionUnavailable");
 
-    public string StepsTitle => IsNotInstalled ? "導入方法" : "対処方法";
+    public string StepsTitle => Text("PawnIo_StepsNotInstalled", "PawnIo_StepsUnavailable");
 
-    public string FirstStep => IsNotInstalled
-        ? "1.  公式サイトまたは GitHub のリリースから PawnIO_setup.exe をダウンロードして実行します。"
-        : "1.  FACEIT などのアンチチートを使っている場合は、終了してから PC を再起動します。改善しない場合は、公式サイトまたは GitHub のリリースから PawnIO を再インストールします。";
+    public string FirstStep => Text("PawnIo_FirstStepNotInstalled", "PawnIo_FirstStepUnavailable");
 
-    public string LastStep => IsNotInstalled
-        ? "2.  インストールが終わったら、GlassMonitor を再起動してください。"
-        : "2.  対処が終わったら、GlassMonitor を再起動してください。";
+    public string LastStep => Text("PawnIo_LastStepNotInstalled", "PawnIo_LastStepUnavailable");
 
     public string? InstalledVersionText =>
-        installedVersion is null ? null : $"インストール済みの PawnIO: {installedVersion}";
+        installedVersion is null ? null : Localizer.Format("PawnIo_InstalledVersion", installedVersion);
 
     /// <summary>未インストールのとき、起動時にこの案内を出すか。</summary>
     public bool ShowOnStartup
@@ -89,9 +84,7 @@ public sealed class PawnIoGuideViewModel(
     public ICommand OpenSiteCommand { get; } = new RelayCommand(_ => OpenUrl(SiteUrl));
 
     /// <summary>コマンドの下の補足。</summary>
-    public string WingetHint => IsNotInstalled
-        ? "winget を使う場合は、ターミナルで次のコマンドを実行します。"
-        : "winget を使う場合は、次のコマンドで最新版に更新できます。";
+    public string WingetHint => Text("PawnIo_WingetHintNotInstalled", "PawnIo_WingetHintUnavailable");
 
     public ICommand OpenReleasesCommand { get; } = new RelayCommand(_ => OpenUrl(ReleasesUrl));
 
@@ -108,6 +101,10 @@ public sealed class PawnIoGuideViewModel(
     });
 
     public ICommand CloseCommand { get; } = new RelayCommand(_ => onClose());
+
+    /// <summary>未インストールのときと、使えないときで文言を変える。</summary>
+    private string Text(string notInstalledKey, string unavailableKey) =>
+        Localizer.Get(IsNotInstalled ? notInstalledKey : unavailableKey);
 
     /// <summary>
     /// アプリは管理者権限で動いているため、ブラウザーを直接起動すると昇格したまま開いてしまう。

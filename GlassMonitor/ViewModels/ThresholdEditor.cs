@@ -1,15 +1,16 @@
 using System.Globalization;
+using GlassMonitor.Localization;
 using GlassMonitor.Settings;
 
 namespace GlassMonitor.ViewModels;
 
 /// <summary>設定画面の温度しきい値（「高め」「高温」）の入力欄。不正な値は無視して元に戻す。</summary>
 public sealed class ThresholdEditor(
-    string label,
+    string labelKey,
     Func<TemperatureThresholds> read,
     Action<TemperatureThresholds> write) : ObservableObject
 {
-    public string Label { get; } = label;
+    public string Label => Localizer.Get(labelKey);
 
     public string WarmText
     {

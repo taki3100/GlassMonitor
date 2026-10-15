@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  日本語の画面の文字列（Strings.resx の訳）。キーは Strings.resx と同じにする。
+-->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Window_Topmost" xml:space="preserve">
+    <value>常に最前面</value>
+  </data>
+  <data name="Window_Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Window_Minimize" xml:space="preserve">
+    <value>最小化</value>
+  </data>
+  <data name="Window_Maximize" xml:space="preserve">
+    <value>最大化</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Settings_LanguageAuto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="Settings_AccentColor" xml:space="preserve">
+    <value>アクセント色</value>
+  </data>
+  <data name="Settings_AccentHexToolTip" xml:space="preserve">
+    <value>#RRGGBB 形式で入力して Enter</value>
+  </data>
+  <data name="Settings_Thresholds" xml:space="preserve">
+    <value>温度のしきい値（℃）</value>
+  </data>
+  <data name="Settings_WarmToolTip" xml:space="preserve">
+    <value>この温度以上で「高め」</value>
+  </data>
+  <data name="Settings_HotToolTip" xml:space="preserve">
+    <value>この温度以上で「高温」</value>
+  </data>
+  <data name="Settings_ThresholdChips" xml:space="preserve">
+    <value>CPU・GPU・メモリ</value>
+  </data>
+  <data name="Settings_ThresholdStorage" xml:space="preserve">
+    <value>SSD</value>
+  </data>
+  <data name="Settings_AutoStart" xml:space="preserve">
+    <value>サインイン時に自動起動</value>
+  </data>
+  <data name="Settings_AmbientGlow" xml:space="preserve">
+    <value>背景のグロー</value>
+  </data>
+  <data name="Settings_MemoryTemperature" xml:space="preserve">
+    <value>メモリ温度（SPD）</value>
+  </data>
+  <data name="Settings_MemoryTemperatureNote" xml:space="preserve">
+    <value>SMBus 経由で DIMM を読み取ります。iCUE でメモリのライティングを制御している場合は OFF のままにしてください。</value>
+  </data>
+  <data name="Settings_Drives" xml:space="preserve">
+    <value>表示するドライブ（最大 4 台）</value>
+  </data>
+  <data name="Tile_Cpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="Tile_Gpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="Tile_Memory" xml:space="preserve">
+    <value>メモリ</value>
+  </data>
+  <data name="Tile_Vram" xml:space="preserve">
+    <value>VRAM</value>
+  </data>
+  <data name="Tile_Storage" xml:space="preserve">
+    <value>ストレージ</value>
+  </data>
+  <data name="Tile_Load" xml:space="preserve">
+    <value>使用率</value>
+  </data>
+  <data name="Tile_UsedSpace" xml:space="preserve">
+    <value>使用容量</value>
+  </data>
+  <data name="Tile_Temperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="Tile_Used" xml:space="preserve">
+    <value>使用量</value>
+  </data>
+  <data name="Tile_Clock" xml:space="preserve">
+    <value>クロック</value>
+  </data>
+  <data name="Tile_Power" xml:space="preserve">
+    <value>消費電力</value>
+  </data>
+  <data name="Tile_Fan" xml:space="preserve">
+    <value>ファン</value>
+  </data>
+  <data name="Tile_InUse" xml:space="preserve">
+    <value>使用中</value>
+  </data>
+  <data name="Tile_Available" xml:space="preserve">
+    <value>空き</value>
+  </data>
+  <data name="Tile_Free" xml:space="preserve">
+    <value>空き</value>
+  </data>
+  <data name="Tile_Speed" xml:space="preserve">
+    <value>速度</value>
+  </data>
+  <data name="Tile_MemoryController" xml:space="preserve">
+    <value>コントローラー</value>
+  </data>
+  <data name="Tile_StorageUsed" xml:space="preserve">
+    <value>使用中</value>
+  </data>
+  <data name="Tile_Health" xml:space="preserve">
+    <value>健康状態</value>
+  </data>
+  <data name="Tile_SixtySecondsAgo" xml:space="preserve">
+    <value>60秒前</value>
+  </data>
+  <data name="Tile_Now" xml:space="preserve">
+    <value>現在</value>
+  </data>
+  <data name="Temperature_Normal" xml:space="preserve">
+    <value>適温</value>
+  </data>
+  <data name="Temperature_Warm" xml:space="preserve">
+    <value>高め</value>
+  </data>
+  <data name="Temperature_Hot" xml:space="preserve">
+    <value>高温</value>
+  </data>
+  <data name="Storage_Read" xml:space="preserve">
+    <value>読込</value>
+  </data>
+  <data name="Storage_Write" xml:space="preserve">
+    <value>書込</value>
+  </data>
+  <data name="Storage_ReadWrite" xml:space="preserve">
+    <value>読込 / 書込</value>
+  </data>
+  <data name="Storage_ActiveTime" xml:space="preserve">
+    <value>アクティブ時間</value>
+  </data>
+  <data name="Storage_DriveCount" xml:space="preserve">
+    <value>{0}台</value>
+  </data>
+  <data name="Storage_DiskNumber" xml:space="preserve">
+    <value>ディスク {0}</value>
+  </data>
+  <data name="Storage_LowSpace" xml:space="preserve">
+    <value>{0} 空き少</value>
+  </data>
+  <data name="Health_Good" xml:space="preserve">
+    <value>良好</value>
+  </data>
+  <data name="Health_Caution" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="Status_Initializing" xml:space="preserve">
+    <value>センサーを初期化しています…</value>
+  </data>
+  <data name="Status_NoSensors" xml:space="preserve">
+    <value>センサー情報を取得できません</value>
+  </data>
+  <data name="Status_UpdateInterval" xml:space="preserve">
+    <value>1秒ごとに更新</value>
+  </data>
+  <data name="Status_LastUpdated" xml:space="preserve">
+    <value>最終更新</value>
+  </data>
+  <data name="Status_TopmostOn" xml:space="preserve">
+    <value>最前面 オン</value>
+  </data>
+  <data name="Status_TopmostOff" xml:space="preserve">
+    <value>最前面 オフ</value>
+  </data>
+  <data name="Status_Administrator" xml:space="preserve">
+    <value>管理者として実行中</value>
+  </data>
+  <data name="Status_NotAdministrator" xml:space="preserve">
+    <value>管理者権限なし</value>
+  </data>
+  <data name="Status_CpuSensorLimited" xml:space="preserve">
+    <value>CPUセンサー制限モード</value>
+  </data>
+  <data name="Status_CpuSensorLimitedToolTip" xml:space="preserve">
+    <value>PawnIO が無い、またはブロックされているため、CPU の温度・消費電力やファン回転数を取得できません。クリックで PawnIO の導入方法を表示します。</value>
+  </data>
+  <data name="Status_PawnIoHowTo" xml:space="preserve">
+    <value>PawnIO の導入方法</value>
+  </data>
+  <data name="AutoStart_ConfirmTitle" xml:space="preserve">
+    <value>自動起動を登録しますか？</value>
+  </data>
+  <data name="AutoStart_ConfirmMessage" xml:space="preserve">
+    <value>Windows にサインインしたときに GlassMonitor を自動で起動します。
+
+センサーの読み取りに管理者権限が必要なため、タスク スケジューラに「{0}」というタスクを「最上位の特権で実行」として登録します。サインイン時に UAC の確認は表示されません。
+
+設定からいつでも解除できます。アプリのフォルダーを移動・削除する前に解除してください。</value>
+  </data>
+  <data name="AutoStart_Register" xml:space="preserve">
+    <value>登録する</value>
+  </data>
+  <data name="AutoStart_RegisterFailed" xml:space="preserve">
+    <value>自動起動を登録できませんでした</value>
+  </data>
+  <data name="AutoStart_UnregisterFailed" xml:space="preserve">
+    <value>自動起動を解除できませんでした</value>
+  </data>
+  <data name="AutoStart_ExePathUnavailable" xml:space="preserve">
+    <value>実行ファイルのパスを取得できません。</value>
+  </data>
+  <data name="AutoStart_TaskSchedulerUnavailable" xml:space="preserve">
+    <value>タスク スケジューラを利用できません。</value>
+  </data>
+  <data name="AutoStart_TaskDescription" xml:space="preserve">
+    <value>サインイン時に GlassMonitor を起動します。センサーの読み取りに管理者権限が必要なため、最上位の特権で実行します。</value>
+  </data>
+  <data name="PawnIo_NotInstalled" xml:space="preserve">
+    <value>未インストール</value>
+  </data>
+  <data name="PawnIo_TitleNotInstalled" xml:space="preserve">
+    <value>PawnIO がインストールされていません</value>
+  </data>
+  <data name="PawnIo_TitleUnavailable" xml:space="preserve">
+    <value>PawnIO を利用できません</value>
+  </data>
+  <data name="PawnIo_DescriptionNotInstalled" xml:space="preserve">
+    <value>GlassMonitor は CPU の温度・クロック・消費電力やマザーボードのファン回転数を読み取るために、オープンソースのドライバー「PawnIO」を使います。PawnIO が無い間は CPU センサー制限モードで動作し、これらの項目は「—」と表示されます。GPU、メモリ、ストレージはそのまま表示できます。</value>
+  </data>
+  <data name="PawnIo_DescriptionUnavailable" xml:space="preserve">
+    <value>PawnIO はインストールされていますが、CPU のセンサーを読み取れませんでした。FACEIT などのアンチチートが PawnIO をブロックしている場合や、ドライバーが読み込まれていない場合に起こります。CPU センサー制限モードで動作し、CPU の温度・クロック・消費電力とファン回転数は「—」と表示されます。GPU、メモリ、ストレージはそのまま表示できます。</value>
+  </data>
+  <data name="PawnIo_InstalledVersion" xml:space="preserve">
+    <value>インストール済みの PawnIO: {0}</value>
+  </data>
+  <data name="PawnIo_StepsNotInstalled" xml:space="preserve">
+    <value>導入方法</value>
+  </data>
+  <data name="PawnIo_StepsUnavailable" xml:space="preserve">
+    <value>対処方法</value>
+  </data>
+  <data name="PawnIo_FirstStepNotInstalled" xml:space="preserve">
+    <value>1.  公式サイトまたは GitHub のリリースから PawnIO_setup.exe をダウンロードして実行します。</value>
+  </data>
+  <data name="PawnIo_FirstStepUnavailable" xml:space="preserve">
+    <value>1.  FACEIT などのアンチチートを使っている場合は、終了してから PC を再起動します。改善しない場合は、公式サイトまたは GitHub のリリースから PawnIO を再インストールします。</value>
+  </data>
+  <data name="PawnIo_OfficialSite" xml:space="preserve">
+    <value>公式サイト（pawnio.eu）</value>
+  </data>
+  <data name="PawnIo_GitHubReleases" xml:space="preserve">
+    <value>GitHub のリリース</value>
+  </data>
+  <data name="PawnIo_WingetHintNotInstalled" xml:space="preserve">
+    <value>winget を使う場合は、ターミナルで次のコマンドを実行します。</value>
+  </data>
+  <data name="PawnIo_WingetHintUnavailable" xml:space="preserve">
+    <value>winget を使う場合は、次のコマンドで最新版に更新できます。</value>
+  </data>
+  <data name="PawnIo_LastStepNotInstalled" xml:space="preserve">
+    <value>2.  インストールが終わったら、GlassMonitor を再起動してください。</value>
+  </data>
+  <data name="PawnIo_LastStepUnavailable" xml:space="preserve">
+    <value>2.  対処が終わったら、GlassMonitor を再起動してください。</value>
+  </data>
+  <data name="PawnIo_ShowOnStartup" xml:space="preserve">
+    <value>起動時にこの案内を表示</value>
+  </data>
+</root>

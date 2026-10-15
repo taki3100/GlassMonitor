@@ -19,9 +19,9 @@ public sealed class StorageTileViewModel : TileViewModel
     private double _graphMaximum = MinimumScale;
 
     public StorageTileViewModel()
-        : base("ストレージ", "温度", "使用中", "空き", "健康状態")
+        : base("Tile_Storage", "Tile_Temperature", "Tile_StorageUsed", "Tile_Free", "Tile_Health")
     {
-        UsageLabel = "使用容量";
+        UsageLabelKey = "Tile_UsedSpace";
         _readHistory = (double?[])_read.Clone();
         _writeHistory = (double?[])_write.Clone();
     }

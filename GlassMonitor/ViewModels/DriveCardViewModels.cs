@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using GlassMonitor.Localization;
 using GlassMonitor.Services;
 using GlassMonitor.Settings;
 
@@ -62,7 +63,7 @@ public sealed class DriveCardViewModel(string key) : ObservableObject
 
     public void Update(DriveReading drive, TemperatureThresholds thresholds)
     {
-        Letters = drive.Letters ?? $"ディスク {drive.DriveNumber}";
+        Letters = drive.Letters ?? DiskName(drive.DriveNumber);
         Label = drive.Label ?? "";
         Description = string.Join(" · ", new[] { drive.Model, drive.Kind }.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -80,7 +81,7 @@ public sealed class DriveCardViewModel(string key) : ObservableObject
         IsLowSpace = drive.FreePercent < LowSpacePercent;
         UsedPercentText = drive.UsedPercent is null
             ? Format.Missing
-            : IsLowSpace ? $"{Format.Percent(drive.UsedPercent)} 空き少" : Format.Percent(drive.UsedPercent);
+            : IsLowSpace ? Localizer.Format("Storage_LowSpace", Format.Percent(drive.UsedPercent)) : Format.Percent(drive.UsedPercent);
 
         ThroughputText = drive.ReadBytesPerSecond is null && drive.WriteBytesPerSecond is null
             ? Format.Missing
@@ -95,10 +96,13 @@ public sealed class DriveCardViewModel(string key) : ObservableObject
         ? Format.Percent(health)
         : drive.HealthStatus switch
         {
-            DriveHealthStatus.Good => "良好",
-            DriveHealthStatus.Caution => "注意",
+            DriveHealthStatus.Good => Localizer.Get("Health_Good"),
+            DriveHealthStatus.Caution => Localizer.Get("Health_Caution"),
             _ => Format.Missing,
         };
+
+    /// <summary>ドライブ文字の無いディスクの名前（「ディスク 2」）。</summary>
+    public static string DiskName(int driveNumber) => Localizer.Format("Storage_DiskNumber", driveNumber);
 
     private static double? Scale(double? gb, bool terabytes) => terabytes ? gb / 1000 : gb;
 
@@ -109,18 +113,18 @@ public sealed class DriveCardViewModel(string key) : ObservableObject
 /// <summary>ストレージのタイル（2〜4 台のカード表示）。</summary>
 public sealed class StorageDrivesViewModel : ObservableObject
 {
-    private string _subtitle = "";
+    private int _count;
 
-    public string Title => "ストレージ";
+    public string Title => Localizer.Get("Tile_Storage");
 
     /// <summary>"4台"</summary>
-    public string Subtitle { get => _subtitle; private set => SetProperty(ref _subtitle, value); }
+    public string Subtitle => _count == 0 ? "" : Localizer.Format("Storage_DriveCount", _count);
 
     public ObservableCollection<DriveCardViewModel> Cards { get; } = [];
 
     public void Update(IReadOnlyList<DriveReading> drives, TemperatureThresholds thresholds)
     {
-        Subtitle = $"{drives.Count}台";
+        SetProperty(ref _count, drives.Count, nameof(Subtitle));
 
         // 並びやディスクが変わったときだけカードを作り直し、それ以外は値だけ更新する
         if (!Cards.Select(c => c.Key).SequenceEqual(drives.Select(d => d.Key)))
@@ -136,14 +140,15 @@ public sealed class StorageDrivesViewModel : ObservableObject
 }
 
 /// <summary>設定画面で、表示するディスクを選ぶ行。</summary>
-public sealed class DriveChoiceViewModel(string key, string title, Action<DriveChoiceViewModel, bool> onToggle) : ObservableObject
+public sealed class DriveChoiceViewModel(DriveChoice drive, Action<DriveChoiceViewModel, bool> onToggle) : ObservableObject
 {
     private bool _isSelected;
     private bool _isEnabled = true;
 
-    public string Key { get; } = key;
+    public string Key => drive.Key;
 
-    public string Title { get; } = title;
+    /// <summary>"C: D:  WD_BLACK SN8100"</summary>
+    public string Title => $"{drive.Letters ?? DriveCardViewModel.DiskName(drive.DriveNumber)}  {drive.Model}";
 
     public bool IsSelected
     {

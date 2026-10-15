@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UI strings in English. English is the default language: it is used when Windows is not in a
+  supported language, and for any string that is missing from a translation (Strings.<code>.resx).
+  To add a language, see CONTRIBUTING.md.
+  The comments describe where each string is shown, for translators.
+-->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Window_Topmost" xml:space="preserve">
+    <value>Always on top</value>
+    <comment>Title bar button tooltip and settings toggle.</comment>
+  </data>
+  <data name="Window_Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Title bar button tooltip and the title of the settings panel.</comment>
+  </data>
+  <data name="Window_Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="Window_Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Close button (title bar tooltip and dialogs).</comment>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_LanguageAuto" xml:space="preserve">
+    <value>Automatic</value>
+    <comment>Language option: follow the Windows display language. Other languages are shown by their own names (English, 日本語).</comment>
+  </data>
+  <data name="Settings_AccentColor" xml:space="preserve">
+    <value>Accent color</value>
+  </data>
+  <data name="Settings_AccentHexToolTip" xml:space="preserve">
+    <value>Type a color as #RRGGBB and press Enter</value>
+  </data>
+  <data name="Settings_Thresholds" xml:space="preserve">
+    <value>Temperature (°C)</value>
+    <comment>Header of the temperature threshold table. Followed by the columns "Warm" and "Hot". Keep it short (about 140 px).</comment>
+  </data>
+  <data name="Settings_WarmToolTip" xml:space="preserve">
+    <value>Shown as "Warm" at or above this temperature</value>
+  </data>
+  <data name="Settings_HotToolTip" xml:space="preserve">
+    <value>Shown as "Hot" at or above this temperature</value>
+  </data>
+  <data name="Settings_ThresholdChips" xml:space="preserve">
+    <value>CPU / GPU / Memory</value>
+    <comment>Row of the temperature threshold table.</comment>
+  </data>
+  <data name="Settings_ThresholdStorage" xml:space="preserve">
+    <value>SSD</value>
+    <comment>Row of the temperature threshold table.</comment>
+  </data>
+  <data name="Settings_AutoStart" xml:space="preserve">
+    <value>Start at sign-in</value>
+  </data>
+  <data name="Settings_AmbientGlow" xml:space="preserve">
+    <value>Ambient glow</value>
+    <comment>Colored glow in the window background.</comment>
+  </data>
+  <data name="Settings_MemoryTemperature" xml:space="preserve">
+    <value>Memory temperature (SPD)</value>
+  </data>
+  <data name="Settings_MemoryTemperatureNote" xml:space="preserve">
+    <value>Reads the DIMMs over SMBus. Leave this off if you control memory lighting with iCUE.</value>
+  </data>
+  <data name="Settings_Drives" xml:space="preserve">
+    <value>Drives to show (up to 4)</value>
+    <comment>Shown only when there are 5 or more physical disks.</comment>
+  </data>
+  <data name="Tile_Cpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="Tile_Gpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="Tile_Memory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="Tile_Vram" xml:space="preserve">
+    <value>VRAM</value>
+  </data>
+  <data name="Tile_Storage" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="Tile_Load" xml:space="preserve">
+    <value>Load</value>
+    <comment>Small label in the center of the ring gauge (CPU, GPU, memory, VRAM).</comment>
+  </data>
+  <data name="Tile_UsedSpace" xml:space="preserve">
+    <value>Used</value>
+    <comment>Small label in the center of the storage ring gauge.</comment>
+  </data>
+  <data name="Tile_Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="Tile_Used" xml:space="preserve">
+    <value>Used</value>
+    <comment>Memory or VRAM in use (large value).</comment>
+  </data>
+  <data name="Tile_Clock" xml:space="preserve">
+    <value>Clock</value>
+  </data>
+  <data name="Tile_Power" xml:space="preserve">
+    <value>Power</value>
+  </data>
+  <data name="Tile_Fan" xml:space="preserve">
+    <value>Fan</value>
+  </data>
+  <data name="Tile_InUse" xml:space="preserve">
+    <value>In use</value>
+    <comment>Memory in use.</comment>
+  </data>
+  <data name="Tile_Available" xml:space="preserve">
+    <value>Available</value>
+    <comment>Available memory.</comment>
+  </data>
+  <data name="Tile_Free" xml:space="preserve">
+    <value>Free</value>
+    <comment>Free VRAM or disk space.</comment>
+  </data>
+  <data name="Tile_Speed" xml:space="preserve">
+    <value>Speed</value>
+    <comment>Memory speed (MT/s).</comment>
+  </data>
+  <data name="Tile_MemoryController" xml:space="preserve">
+    <value>Controller</value>
+    <comment>GPU memory controller load.</comment>
+  </data>
+  <data name="Tile_StorageUsed" xml:space="preserve">
+    <value>Used</value>
+    <comment>Used disk space.</comment>
+  </data>
+  <data name="Tile_Health" xml:space="preserve">
+    <value>Health</value>
+    <comment>Disk health (remaining life or SMART status).</comment>
+  </data>
+  <data name="Tile_SixtySecondsAgo" xml:space="preserve">
+    <value>60 s ago</value>
+    <comment>Left end of the history graph.</comment>
+  </data>
+  <data name="Tile_Now" xml:space="preserve">
+    <value>Now</value>
+    <comment>Right end of the history graph.</comment>
+  </data>
+  <data name="Temperature_Normal" xml:space="preserve">
+    <value>Normal</value>
+    <comment>Temperature badge.</comment>
+  </data>
+  <data name="Temperature_Warm" xml:space="preserve">
+    <value>Warm</value>
+    <comment>Temperature badge and threshold column.</comment>
+  </data>
+  <data name="Temperature_Hot" xml:space="preserve">
+    <value>Hot</value>
+    <comment>Temperature badge and threshold column.</comment>
+  </data>
+  <data name="Storage_Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="Storage_Write" xml:space="preserve">
+    <value>Write</value>
+  </data>
+  <data name="Storage_ReadWrite" xml:space="preserve">
+    <value>Read / Write</value>
+  </data>
+  <data name="Storage_ActiveTime" xml:space="preserve">
+    <value>Active time</value>
+  </data>
+  <data name="Storage_DriveCount" xml:space="preserve">
+    <value>{0} drives</value>
+    <comment>{0} = number of disks (2 to 4).</comment>
+  </data>
+  <data name="Storage_DiskNumber" xml:space="preserve">
+    <value>Disk {0}</value>
+    <comment>Shown for disks without a drive letter. {0} = disk number.</comment>
+  </data>
+  <data name="Storage_LowSpace" xml:space="preserve">
+    <value>{0} Low space</value>
+    <comment>Shown when less than 10% is free. {0} = used percentage, e.g. "92%".</comment>
+  </data>
+  <data name="Health_Good" xml:space="preserve">
+    <value>Good</value>
+    <comment>SMART status.</comment>
+  </data>
+  <data name="Health_Caution" xml:space="preserve">
+    <value>Caution</value>
+    <comment>SMART status.</comment>
+  </data>
+  <data name="Status_Initializing" xml:space="preserve">
+    <value>Initializing sensors…</value>
+  </data>
+  <data name="Status_NoSensors" xml:space="preserve">
+    <value>Unable to read sensor information</value>
+  </data>
+  <data name="Status_UpdateInterval" xml:space="preserve">
+    <value>Updates every second</value>
+  </data>
+  <data name="Status_LastUpdated" xml:space="preserve">
+    <value>Last updated</value>
+    <comment>Followed by the time, e.g. "10:52:00".</comment>
+  </data>
+  <data name="Status_TopmostOn" xml:space="preserve">
+    <value>Always on top: On</value>
+  </data>
+  <data name="Status_TopmostOff" xml:space="preserve">
+    <value>Always on top: Off</value>
+  </data>
+  <data name="Status_Administrator" xml:space="preserve">
+    <value>Running as administrator</value>
+  </data>
+  <data name="Status_NotAdministrator" xml:space="preserve">
+    <value>No administrator rights</value>
+  </data>
+  <data name="Status_CpuSensorLimited" xml:space="preserve">
+    <value>CPU sensor limited mode</value>
+  </data>
+  <data name="Status_CpuSensorLimitedToolTip" xml:space="preserve">
+    <value>CPU temperature, power and fan speeds cannot be read because PawnIO is missing or blocked. Click to see how to install PawnIO.</value>
+  </data>
+  <data name="Status_PawnIoHowTo" xml:space="preserve">
+    <value>How to install PawnIO</value>
+  </data>
+  <data name="AutoStart_ConfirmTitle" xml:space="preserve">
+    <value>Start GlassMonitor at sign-in?</value>
+  </data>
+  <data name="AutoStart_ConfirmMessage" xml:space="preserve">
+    <value>GlassMonitor will start automatically when you sign in to Windows.
+
+Because reading the sensors requires administrator rights, a task named "{0}" is registered in Task Scheduler to run with highest privileges. No UAC prompt appears at sign-in.
+
+You can turn this off in the settings at any time. Turn it off before you move or delete the app folder.</value>
+    <comment>{0} = task name (GlassMonitor). "Run with highest privileges" is the option name in Task Scheduler.</comment>
+  </data>
+  <data name="AutoStart_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="AutoStart_RegisterFailed" xml:space="preserve">
+    <value>Could not register start at sign-in</value>
+  </data>
+  <data name="AutoStart_UnregisterFailed" xml:space="preserve">
+    <value>Could not turn off start at sign-in</value>
+  </data>
+  <data name="AutoStart_ExePathUnavailable" xml:space="preserve">
+    <value>Could not get the path of the executable.</value>
+  </data>
+  <data name="AutoStart_TaskSchedulerUnavailable" xml:space="preserve">
+    <value>Task Scheduler is not available.</value>
+  </data>
+  <data name="AutoStart_TaskDescription" xml:space="preserve">
+    <value>Starts GlassMonitor at sign-in. Runs with highest privileges because reading the sensors requires administrator rights.</value>
+    <comment>Description of the task shown in Task Scheduler.</comment>
+  </data>
+  <data name="PawnIo_NotInstalled" xml:space="preserve">
+    <value>not installed</value>
+    <comment>Shown at the bottom of the settings panel: "PawnIO not installed".</comment>
+  </data>
+  <data name="PawnIo_TitleNotInstalled" xml:space="preserve">
+    <value>PawnIO is not installed</value>
+  </data>
+  <data name="PawnIo_TitleUnavailable" xml:space="preserve">
+    <value>PawnIO is not available</value>
+  </data>
+  <data name="PawnIo_DescriptionNotInstalled" xml:space="preserve">
+    <value>GlassMonitor uses PawnIO, an open-source driver, to read CPU temperature, clock and power and motherboard fan speeds. Without PawnIO, GlassMonitor runs in CPU sensor limited mode and these values are shown as "—". GPU, memory and storage are shown as usual.</value>
+  </data>
+  <data name="PawnIo_DescriptionUnavailable" xml:space="preserve">
+    <value>PawnIO is installed, but the CPU sensors could not be read. This happens when an anti-cheat such as FACEIT blocks PawnIO or when the driver is not loaded. GlassMonitor runs in CPU sensor limited mode, and CPU temperature, clock, power and fan speeds are shown as "—". GPU, memory and storage are shown as usual.</value>
+  </data>
+  <data name="PawnIo_InstalledVersion" xml:space="preserve">
+    <value>Installed PawnIO: {0}</value>
+    <comment>{0} = version, e.g. "2.2.0".</comment>
+  </data>
+  <data name="PawnIo_StepsNotInstalled" xml:space="preserve">
+    <value>How to install</value>
+  </data>
+  <data name="PawnIo_StepsUnavailable" xml:space="preserve">
+    <value>What to do</value>
+  </data>
+  <data name="PawnIo_FirstStepNotInstalled" xml:space="preserve">
+    <value>1.  Download PawnIO_setup.exe from the official site or the GitHub releases and run it.</value>
+  </data>
+  <data name="PawnIo_FirstStepUnavailable" xml:space="preserve">
+    <value>1.  If you use an anti-cheat such as FACEIT, exit it and restart your PC. If that does not help, reinstall PawnIO from the official site or the GitHub releases.</value>
+  </data>
+  <data name="PawnIo_OfficialSite" xml:space="preserve">
+    <value>Official site (pawnio.eu)</value>
+  </data>
+  <data name="PawnIo_GitHubReleases" xml:space="preserve">
+    <value>GitHub releases</value>
+  </data>
+  <data name="PawnIo_WingetHintNotInstalled" xml:space="preserve">
+    <value>To use winget, run the following command in a terminal.</value>
+  </data>
+  <data name="PawnIo_WingetHintUnavailable" xml:space="preserve">
+    <value>With winget, you can update to the latest version with the following command.</value>
+  </data>
+  <data name="PawnIo_LastStepNotInstalled" xml:space="preserve">
+    <value>2.  After the installation, restart GlassMonitor.</value>
+  </data>
+  <data name="PawnIo_LastStepUnavailable" xml:space="preserve">
+    <value>2.  When you are done, restart GlassMonitor.</value>
+  </data>
+  <data name="PawnIo_ShowOnStartup" xml:space="preserve">
+    <value>Show this guide on startup</value>
+  </data>
+</root>

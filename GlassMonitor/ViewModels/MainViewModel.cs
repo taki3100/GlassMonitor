@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows.Input;
 using System.Windows.Media;
+using GlassMonitor.Localization;
 using GlassMonitor.Services;
 using GlassMonitor.Settings;
 
@@ -21,6 +22,23 @@ public sealed class AccentOption(string hex) : ObservableObject
     }
 }
 
+/// <summary>設定画面の言語の選択肢。Code は "auto" または対応言語のコード。</summary>
+public sealed class LanguageOption(string code, string? nativeName) : ObservableObject
+{
+    private bool _isSelected;
+
+    public string Code { get; } = code;
+
+    /// <summary>言語名はその言語で書く（English / 日本語）。「自動」だけは表示中の言語にする。</summary>
+    public string Name => nativeName ?? Localizer.Get("Settings_LanguageAuto");
+
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set => SetProperty(ref _isSelected, value);
+    }
+}
+
 public sealed class MainViewModel : ObservableObject
 {
     private static readonly string[] AccentPresets =
@@ -28,7 +46,8 @@ public sealed class MainViewModel : ObservableObject
 
     private readonly AppSettings _settings;
 
-    private string _systemSummary = "センサーを初期化しています…";
+    private readonly string _appVersion;
+    private string? _systemSummary;
     private string _lastUpdated = Format.Missing;
     private string _accentHex = AppSettings.DefaultAccent;
     private MemoryReading? _lastMemory;
@@ -42,23 +61,23 @@ public sealed class MainViewModel : ObservableObject
     {
         _settings = settings;
 
-        Cpu = new TileViewModel("CPU", "温度", "クロック", "消費電力", "ファン");
-        Gpu = new TileViewModel("GPU", "温度", "クロック", "消費電力", "ファン");
-        Memory = new TileViewModel("メモリ", "温度", "使用中", "空き", "速度");
-        Vram = new TileViewModel("VRAM", "使用量", "空き", "クロック", "コントローラー");
+        Cpu = new TileViewModel("Tile_Cpu", "Tile_Temperature", "Tile_Clock", "Tile_Power", "Tile_Fan");
+        Gpu = new TileViewModel("Tile_Gpu", "Tile_Temperature", "Tile_Clock", "Tile_Power", "Tile_Fan");
+        Memory = new TileViewModel("Tile_Memory", "Tile_Temperature", "Tile_InUse", "Tile_Available", "Tile_Speed");
+        Vram = new TileViewModel("Tile_Vram", "Tile_Used", "Tile_Free", "Tile_Clock", "Tile_MemoryController");
         Storage = new StorageTileViewModel();
         ApplyThresholds();
         ShowMemory();
 
         ThresholdEditors =
         [
-            new ThresholdEditor("CPU・GPU・メモリ", () => _settings.ChipThresholds, t =>
+            new ThresholdEditor("Settings_ThresholdChips", () => _settings.ChipThresholds, t =>
             {
                 _settings.ChipThresholds = t;
                 ApplyThresholds();
                 SettingsStore.Save(_settings);
             }),
-            new ThresholdEditor("SSD", () => _settings.StorageThresholds, t =>
+            new ThresholdEditor("Settings_ThresholdStorage", () => _settings.StorageThresholds, t =>
             {
                 _settings.StorageThresholds = t;
                 ApplyThresholds();
@@ -73,14 +92,25 @@ public sealed class MainViewModel : ObservableObject
                 AccentHex = hex;
         });
 
+        LanguageOptions =
+        [
+            new LanguageOption(Languages.Auto, null),
+            .. Languages.Supported.Select(l => new LanguageOption(l.Code, l.NativeName)),
+        ];
+        SelectLanguageCommand = new RelayCommand(p =>
+        {
+            if (p is string code)
+                SelectLanguage(code);
+        });
+        UpdateLanguageSelection();
+
         IsAdministrator = SystemStatus.IsAdministrator();
         _pawnIoVersion = SystemStatus.PawnIoVersion;
         _autoStart = AutoStartTask.IsRegistered();
         ShowPawnIoGuideCommand = new RelayCommand(_ => ShowPawnIoGuide());
 
-        string appVersion = typeof(MainViewModel).Assembly
+        _appVersion = typeof(MainViewModel).Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "";
-        VersionText = $"GlassMonitor {appVersion} · PawnIO {FormatVersion(_pawnIoVersion) ?? "未インストール"}";
 
         if (!TryApplyAccent(settings.Accent))
             TryApplyAccent(AppSettings.DefaultAccent);
@@ -105,7 +135,8 @@ public sealed class MainViewModel : ObservableObject
     }
 
     /// <summary>"GlassMonitor 0.1.1 · PawnIO 2.2.0"（不具合や互換性の報告用）</summary>
-    public string VersionText { get; }
+    public string VersionText =>
+        $"GlassMonitor {_appVersion} · PawnIO {FormatVersion(_pawnIoVersion) ?? Localizer.Get("PawnIo_NotInstalled")}";
 
     /// <summary>ディスクが 2 台以上ならカード表示、1 台なら詳細表示。</summary>
     public bool IsStorageMulti
@@ -147,7 +178,7 @@ public sealed class MainViewModel : ObservableObject
                 if (value)
                     ConfirmAutoStart();
                 else
-                    UpdateAutoStart(AutoStartTask.Unregister, "自動起動を解除できませんでした");
+                    UpdateAutoStart(AutoStartTask.Unregister, "AutoStart_UnregisterFailed");
             }
             // 確認が済むまではトグルを元の状態に戻しておくため常に通知する
             OnPropertyChanged();
@@ -166,14 +197,19 @@ public sealed class MainViewModel : ObservableObject
 
     public ICommand SelectAccentCommand { get; }
 
+    /// <summary>言語の選択肢（自動 / 日本語 / English …）。</summary>
+    public IReadOnlyList<LanguageOption> LanguageOptions { get; }
+
+    public ICommand SelectLanguageCommand { get; }
+
     public bool IsAdministrator { get; }
 
-    public string AdminText => IsAdministrator ? "管理者として実行中" : "管理者権限なし";
+    public string AdminText => Localizer.Get(IsAdministrator ? "Status_Administrator" : "Status_NotAdministrator");
 
     /// <summary>"Core Ultra 7 265K · RTX 5070 Ti · 64 GB"</summary>
     public string SystemSummary
     {
-        get => _systemSummary;
+        get => _systemSummary ?? Localizer.Get("Status_Initializing");
         private set => SetProperty(ref _systemSummary, value);
     }
 
@@ -197,7 +233,7 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public string TopmostText => Topmost ? "最前面 オン" : "最前面 オフ";
+    public string TopmostText => Localizer.Get(Topmost ? "Status_TopmostOn" : "Status_TopmostOff");
 
     public bool AmbientGlow
     {
@@ -288,7 +324,7 @@ public sealed class MainViewModel : ObservableObject
         IsCpuSensorLimited = cpu.Temperature is null && cpu.PowerWatts is null;
 
         string summary = Join(cpu.Name, NameFormatter.ShortGpu(gpu.Name), installed);
-        SystemSummary = summary.Length > 0 ? summary : "センサー情報を取得できません";
+        SystemSummary = summary.Length > 0 ? summary : Localizer.Get("Status_NoSensors");
         LastUpdated = snapshot.Timestamp.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
     }
 
@@ -321,7 +357,7 @@ public sealed class MainViewModel : ObservableObject
         {
             DriveChoices.Clear();
             foreach (var drive in available)
-                DriveChoices.Add(new DriveChoiceViewModel(drive.Key, drive.Title, ToggleDrive));
+                DriveChoices.Add(new DriveChoiceViewModel(drive, ToggleDrive));
             OnPropertyChanged(nameof(HasDriveChoices));
         }
 
@@ -393,13 +429,13 @@ public sealed class MainViewModel : ObservableObject
 
         if (MemoryTemperature)
         {
-            Memory.SetLayout("温度", "使用中", "空き", "速度");
+            Memory.SetLayout("Tile_Temperature", "Tile_InUse", "Tile_Available", "Tile_Speed");
             Memory.SetTemperature(mem?.Temperature);
             Memory.SetRows(used, free, speed);
         }
         else
         {
-            Memory.SetLayout("使用量", "空き", "速度", "温度");
+            Memory.SetLayout("Tile_Used", "Tile_Available", "Tile_Speed", "Tile_Temperature");
             Memory.SetPrimary(mem?.UsedGb, "0.0", "GB",
                 mem?.TotalGb is double total ? $"/ {Format.Number(total, "0.0")} GB" : null);
             Memory.SetRows(free, speed, Format.Missing);
@@ -409,19 +445,15 @@ public sealed class MainViewModel : ObservableObject
     private void ConfirmAutoStart()
     {
         ActiveDialog = new ConfirmDialogViewModel(
-            "自動起動を登録しますか？",
-            "Windows にサインインしたときに GlassMonitor を自動で起動します。\n\n"
-                + "センサーの読み取りに管理者権限が必要なため、タスク スケジューラに「"
-                + AutoStartTask.TaskName
-                + "」というタスクを「最上位の特権で実行」として登録します。サインイン時に UAC の確認は表示されません。\n\n"
-                + "設定からいつでも解除できます。アプリのフォルダーを移動・削除する前に解除してください。",
-            "登録する",
-            "キャンセル",
-            onConfirm: () => UpdateAutoStart(AutoStartTask.Register, "自動起動を登録できませんでした"),
+            Localizer.Get("AutoStart_ConfirmTitle"),
+            Localizer.Format("AutoStart_ConfirmMessage", AutoStartTask.TaskName),
+            Localizer.Get("AutoStart_Register"),
+            Localizer.Get("Common_Cancel"),
+            onConfirm: () => UpdateAutoStart(AutoStartTask.Register, "AutoStart_RegisterFailed"),
             onClose: CloseDialog);
     }
 
-    private void UpdateAutoStart(Action change, string failureTitle)
+    private void UpdateAutoStart(Action change, string failureTitleKey)
     {
         try
         {
@@ -429,7 +461,8 @@ public sealed class MainViewModel : ObservableObject
         }
         catch (AutoStartException ex)
         {
-            ActiveDialog = new ConfirmDialogViewModel(failureTitle, ex.Message, "閉じる", null, () => { }, CloseDialog);
+            ActiveDialog = new ConfirmDialogViewModel(
+                Localizer.Get(failureTitleKey), ex.Message, Localizer.Get("Common_Close"), null, () => { }, CloseDialog);
         }
 
         _autoStart = AutoStartTask.IsRegistered();
@@ -437,6 +470,46 @@ public sealed class MainViewModel : ObservableObject
     }
 
     private void CloseDialog() => ActiveDialog = null;
+
+    private void SelectLanguage(string code)
+    {
+        if (code == Localizer.Language)
+            return;
+
+        _settings.Language = code;
+        SettingsStore.Save(_settings);
+        Localizer.SetLanguage(code);
+        UpdateLanguageSelection();
+        RefreshText();
+    }
+
+    private void UpdateLanguageSelection()
+    {
+        foreach (var option in LanguageOptions)
+            option.IsSelected = option.Code == Localizer.Language;
+    }
+
+    /// <summary>
+    /// 言語を切り替えたあと、表示中の文字列を読み直させる（XAML の {l:Loc} は Localizer が通知する）。
+    /// センサーの値に付く文字（「良好」「空き少」など）は、次の更新（1 秒以内）で切り替わる。
+    /// </summary>
+    private void RefreshText()
+    {
+        TileViewModel[] tiles = [Cpu, Gpu, Memory, Vram, Storage];
+        ObservableObject[] items =
+        [
+            this,
+            StorageDrives,
+            .. tiles,
+            .. tiles.SelectMany(t => t.Rows),
+            .. ThresholdEditors,
+            .. DriveChoices,
+            .. LanguageOptions,
+        ];
+        foreach (var item in items)
+            item.RefreshAll();
+        (ActiveDialog as ObservableObject)?.RefreshAll();
+    }
 
     private void ApplyThresholds()
     {

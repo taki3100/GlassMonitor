@@ -71,8 +71,8 @@ public sealed record DriveReading(
     public double? FreePercent => TotalGb > 0 ? FreeGb / TotalGb * 100 : null;
 }
 
-/// <summary>設定画面で表示するドライブを選ぶための一覧の 1 行。</summary>
-public sealed record DriveChoice(string Key, string Title);
+/// <summary>設定画面で表示するドライブを選ぶための一覧の 1 行。Letters はドライブ文字（"C: D:"、無ければ null）。</summary>
+public sealed record DriveChoice(string Key, string? Letters, int DriveNumber, string? Model);
 
 public sealed record HardwareSnapshot(
     CpuReading Cpu,

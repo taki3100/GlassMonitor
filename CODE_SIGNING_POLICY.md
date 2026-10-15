@@ -21,7 +21,7 @@ All team members use multi-factor authentication (MFA) for GitHub and SignPath.
 
 ## What gets signed
 
-- Only files built from the source code in this repository are signed: `GlassMonitor.exe` and `GlassMonitor.dll`.
+- Only files built from the source code in this repository are signed: `GlassMonitor.exe`, `GlassMonitor.dll` and the UI language resources (`<language>/GlassMonitor.resources.dll`, e.g. `ja/GlassMonitor.resources.dll`).
 - Release builds are produced by GitHub Actions on GitHub-hosted runners from a version tag (see [`.github/workflows/release.yml`](.github/workflows/release.yml)). Build scripts and CI configuration are part of this repository.
 - Every signing request is approved manually by an approver.
 - Third-party components (LibreHardwareMonitorLib and its dependencies, the .NET runtime) are shipped unchanged and are **not** signed with this project's certificate. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
@@ -66,7 +66,7 @@ GlassMonitor は 1 人で開発しており、すべての役割を [taki3100](h
 
 ### 署名の対象
 
-- このリポジトリのソースからビルドした `GlassMonitor.exe` と `GlassMonitor.dll` だけを署名します。
+- このリポジトリのソースからビルドした `GlassMonitor.exe`、`GlassMonitor.dll`、画面の言語リソース（`ja/GlassMonitor.resources.dll` など `<言語>/GlassMonitor.resources.dll`）だけを署名します。
 - リリース用のビルドは、バージョンタグをもとに GitHub Actions（GitHub ホストのランナー）で作成します（[`.github/workflows/release.yml`](.github/workflows/release.yml)）。
 - 署名リクエストは承認者が毎回手動で承認します。
 - サードパーティのコンポーネント（LibreHardwareMonitorLib とその依存ライブラリ、.NET ランタイム）は変更せずに同梱し、このプロジェクトの証明書では署名しません。
