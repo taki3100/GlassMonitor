@@ -100,7 +100,8 @@ GlassMonitor は、ゲームのプロセスに触れません（他プロセス�
 
 | アンチチート | 状況 |
 |---|---|
-| FACEIT | **非対応**。PawnIO の署名証明書がチートソフトと共通のため、PawnIO がブロックされます（GlassMonitor は CPU センサー制限モードで動作します） |
+| Tencent ACE（Arknights: Endfield） | **動作確認済み**。起動から約 1 時間プレイして問題なし（確認日 2026-10-15、GlassMonitor 0.1.1、PawnIO 2.2.0） |
+| FACEIT | **非対応**。FACEIT は PawnIO をブロックします（FACEIT サポートの説明では、PawnIO の署名証明書がチートソフトの署名にも使われていたため）。GlassMonitor は CPU センサー制限モードで動作します |
 | Easy Anti-Cheat、BattlEye、Riot Vanguard など、その他のアンチチート | **未検証** |
 
 動作報告を募集しています。[アンチチート互換性の報告](https://github.com/taki3100/GlassMonitor/issues/new?template=anticheat-compatibility.yml)から、ゲーム名、アンチチート名、結果、GlassMonitor と PawnIO のバージョン、起動した順番を教えてください。
@@ -143,6 +144,8 @@ GlassMonitor はネットワークに接続せず、データを収集・送信�
 ### コード署名ポリシー（Code signing policy）
 
 Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
+現在のリリースは未署名です（SignPath Foundation に申請予定）。
 
 署名の対象・役割・プライバシーポリシーは [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) を参照してください。
 
@@ -247,7 +250,8 @@ GlassMonitor does not touch game processes: it does not read or write the memory
 
 | Anti-cheat | Status |
 |---|---|
-| FACEIT | **Not supported.** FACEIT blocks PawnIO because PawnIO's signing certificate is shared with cheat software (GlassMonitor keeps running in CPU sensor limited mode) |
+| Tencent ACE (Arknights: Endfield) | **Works.** Launched and played for about an hour without problems (checked on 2026-10-15 with GlassMonitor 0.1.1 and PawnIO 2.2.0) |
+| FACEIT | **Not supported.** FACEIT blocks PawnIO (according to FACEIT support, because PawnIO's signing certificate had also been used to sign cheat software). GlassMonitor keeps running in CPU sensor limited mode |
 | Easy Anti-Cheat, BattlEye, Riot Vanguard and other anti-cheats | **Not tested** |
 
 Reports are welcome. Please use the [anti-cheat compatibility report](https://github.com/taki3100/GlassMonitor/issues/new?template=anticheat-compatibility.yml) and include the game, the anti-cheat, the result, the GlassMonitor and PawnIO versions, and the order in which you started them.
@@ -290,6 +294,8 @@ GlassMonitor does not connect to the network and does not collect or send any da
 ### Code signing policy
 
 Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+
+Current releases are unsigned (an application to SignPath Foundation is planned).
 
 See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) for what is signed, team roles and the privacy policy.
 
