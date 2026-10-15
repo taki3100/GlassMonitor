@@ -78,8 +78,8 @@ Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '-
 Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang en --record 10 docs\demo-en.gif'
 ```
 
-- `--record <seconds> <file.gif>` waits until the graphs have 60 seconds of data (about one minute), records for the given number of seconds (up to 60) and exits. The GIF is 900 pixels wide, about 15 frames per second, and loops. A 10-second GIF is about 200 KB.
-- Only the contents of the GlassMonitor window are recorded. The desktop and other windows, even ones that cover GlassMonitor, are not captured, and mouse-over effects are not shown. The Acrylic background is drawn by Windows outside the window contents, so the GIF uses the solid background that GlassMonitor shows when Acrylic is not available.
+- `--record <seconds> <file.gif>` waits until the graphs have 60 seconds of data (about one minute), records for the given number of seconds (up to 60) and exits. The GIF is 900 pixels wide, about 15 frames per second, and loops. A 10-second GIF is about 450 KB.
+- Only the contents of the GlassMonitor window are recorded. The desktop and other windows, even ones that cover GlassMonitor, are not captured, and mouse-over effects are not shown. The Acrylic background (the desktop seen through frosted glass) is drawn by Windows outside the window contents. So, only while recording, GlassMonitor draws a colorful backdrop of blurred color spots behind the window, which shows through the translucent window as it would through frosted glass.
 - From 2 to 6 seconds into the recording, GlassMonitor puts a light load on the CPU (a quarter of the logical processors, at low priority) so that the CPU usage and graph change.
 - `--demo-disks 4` shows four dummy disks, so the storage cards look the same on every PC.
 - As with screenshots, exit GlassMonitor first, and your settings are not read or changed.
@@ -164,8 +164,8 @@ Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '-
 Start-Process -Wait GlassMonitor\bin\Release\net10.0-windows\GlassMonitor.exe '--demo-disks 4 --lang en --record 10 docs\demo-en.gif'
 ```
 
-- `--record <秒数> <file.gif>` は、グラフが 60 秒分たまるのを待って（約 1 分）、指定した秒数（最大 60 秒）だけ録画して終了します。GIF は横幅 900 ピクセル、約 15 fps で、ループ再生します。10 秒で約 200 KB です。
-- 録画するのは GlassMonitor のウィンドウの中身だけです。デスクトップや他のウィンドウ（GlassMonitor に重なっているものも含む）は写らず、マウスを乗せたときの表示も写りません。Acrylic の背景はウィンドウの中身の外で Windows が描くため、GIF では Acrylic が使えないときと同じ単色の背景になります。
+- `--record <秒数> <file.gif>` は、グラフが 60 秒分たまるのを待って（約 1 分）、指定した秒数（最大 60 秒）だけ録画して終了します。GIF は横幅 900 ピクセル、約 15 fps で、ループ再生します。10 秒で約 450 KB です。
+- 録画するのは GlassMonitor のウィンドウの中身だけです。デスクトップや他のウィンドウ（GlassMonitor に重なっているものも含む）は写らず、マウスを乗せたときの表示も写りません。Acrylic の背景（すりガラス越しのデスクトップ）はウィンドウの中身の外で Windows が描くため、録画のときだけ、ウィンドウの背後に色の玉をぼかしたような背景を描いて、すりガラス越しに透けて見えるようにしています。
 - 録画の 2〜6 秒目は、CPU の使用率とグラフが動くよう、CPU に軽い負荷をかけます（論理プロセッサーの 1/4 のスレッド、低い優先度）。
 - `--demo-disks 4` でダミーのディスクを 4 台表示するので、どの PC でも同じカード表示になります。
 - スクリーンショットと同じく、先に GlassMonitor を終了してください。利用者の設定は読み込まず、変更もしません。

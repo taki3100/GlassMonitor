@@ -7,7 +7,10 @@ namespace GlassMonitor.Capture;
 /// <list type="bullet">
 /// <item>パレットは最初のフレームから作った 255 色を全フレームで使う（UI の色はほとんど変わらないため）。</item>
 /// <item>前のフレームから変わらないピクセルは透明にし、変わった範囲だけを書き込む（ファイルを小さくするため）。</item>
-/// <item>ディザリングはしない（フレームごとにノイズが変わって、かえって大きくなるため）。</item>
+/// <item>
+/// グラデーションに縞が出ないよう、位置だけで決まる組織的ディザ（Bayer 8×8）をかける。
+/// 誤差拡散と違って、変わらない部分は前のフレームと同じ番号になるので、差分が増えない。
+/// </item>
 /// </list>
 /// </summary>
 internal sealed class GifEncoder(Stream stream, int width, int height)
@@ -32,7 +35,7 @@ internal sealed class GifEncoder(Stream stream, int width, int height)
             WriteHeader(_palette);
         }
 
-        var indices = _palette.Map(bgra);
+        var indices = _palette.Map(bgra, width);
         if (_pending is { } pending)
             WriteFrame(pending.Indices, time - pending.Time);
         _pending = (indices, time);
@@ -140,6 +143,25 @@ internal sealed class GifEncoder(Stream stream, int width, int height)
         private const int Bits = 6;
         private const int Levels = 1 << Bits;
 
+        // 組織的ディザの強さ（色の値に足す幅、0〜255 の単位）
+        private const double DitherStrength = 16;
+
+        private static readonly int[] Bayer8 =
+        [
+            0, 32, 8, 40, 2, 34, 10, 42,
+            48, 16, 56, 24, 50, 18, 58, 26,
+            12, 44, 4, 36, 14, 46, 6, 38,
+            60, 28, 52, 20, 62, 30, 54, 22,
+            3, 35, 11, 43, 1, 33, 9, 41,
+            51, 19, 59, 27, 49, 17, 57, 25,
+            15, 47, 7, 39, 13, 45, 5, 37,
+            63, 31, 55, 23, 61, 29, 53, 21,
+        ];
+
+        // Bayer の値（0〜63）を、色に足す -8〜+8 程度の値にしたもの
+        private static readonly int[] DitherOffsets =
+            Bayer8.Select(t => (int)Math.Round(((t + 0.5) / 64 - 0.5) * DitherStrength)).ToArray();
+
         // 丸めた色ごとの、最も近いパレットの番号（未計算は -1）
         private readonly short[] _nearest = new short[Levels * Levels * Levels];
 
@@ -201,13 +223,14 @@ internal sealed class GifEncoder(Stream stream, int width, int height)
             return new Palette(colors);
         }
 
-        /// <summary>Bgra32 のピクセルをパレットの番号に置き換える。</summary>
-        public byte[] Map(byte[] bgra)
+        /// <summary>Bgra32 のピクセルを、組織的ディザをかけてパレットの番号に置き換える。</summary>
+        public byte[] Map(byte[] bgra, int width)
         {
             var indices = new byte[bgra.Length / 4];
             for (int i = 0; i < indices.Length; i++)
             {
-                int key = Key(bgra[i * 4 + 2], bgra[i * 4 + 1], bgra[i * 4]);
+                int offset = DitherOffsets[((i / width) & 7) * 8 + ((i % width) & 7)];
+                int key = Key(Dither(bgra[i * 4 + 2], offset), Dither(bgra[i * 4 + 1], offset), Dither(bgra[i * 4], offset));
                 short index = _nearest[key];
                 if (index < 0)
                     _nearest[key] = index = Nearest(key);
@@ -239,6 +262,8 @@ internal sealed class GifEncoder(Stream stream, int width, int height)
             int channel = Array.IndexOf(ranges, ranges.Max());
             return (channel, ranges[channel]);
         }
+
+        private static byte Dither(byte value, int offset) => (byte)Math.Clamp(value + offset, 0, 255);
 
         private static int Key(byte r, byte g, byte b) =>
             ((r >> (8 - Bits)) << (Bits * 2)) | ((g >> (8 - Bits)) << Bits) | (b >> (8 - Bits));
