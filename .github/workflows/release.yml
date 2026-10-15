@@ -12,7 +12,7 @@
 #   2. 下の sign ジョブのコメントを外し、project-slug / signing-policy-slug を SignPath 側の設定に合わせる
 #   3. release ジョブの needs と ARTIFACT_ID を「署名を有効にしたら」のコメントどおりに変える
 #   4. リポジトリ変数（Variables）SIGNING_ENABLED を true にする
-#      （true でない間は、Release ノートの SignPath の行に「(application pending; this release is unsigned)」が付く）
+#      （true のときだけ Release ノートに SignPath のクレジットを載せる。それ以外は「This release is unsigned.」と書く）
 #   SignPath の artifact configuration の例は .signpath/artifact-configuration.xml にある。
 
 name: Release
@@ -151,15 +151,19 @@ jobs:
           # リポジトリ変数。未作成のときは空文字になる
           SIGNING_ENABLED: ${{ vars.SIGNING_ENABLED }}
         run: |
-          # 署名を有効にするまで（SIGNING_ENABLED が true でない間）は、未署名であることを書き添える
-          $unsigned = if ($env:SIGNING_ENABLED -eq "true") { "" } else { " (application pending; this release is unsigned)" }
+          # 署名を有効にしたら（SIGNING_ENABLED が true）SignPath のクレジットを、それまでは未署名であることを書く
+          $signing = if ($env:SIGNING_ENABLED -eq "true") {
+            "Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)"
+          } else {
+            "This release is unsigned."
+          }
           $notes = @"
           ## GlassMonitor $env:VERSION
 
           - Download: ``$env:ZIP`` (Windows x64, self-contained). Verify it with the ``.sha256`` file.
           - Requires administrator rights and [PawnIO](https://pawnio.eu/) for CPU temperature and other low-level sensors.
           - [Code signing policy](https://github.com/${{ github.repository }}/blob/main/CODE_SIGNING_POLICY.md)
-          - Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)$unsigned
+          - $signing
 
           "@
           Set-Content notes.md $notes -Encoding utf8

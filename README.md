@@ -147,11 +147,9 @@ GlassMonitor はネットワークに接続せず、データを収集・送信�
 
 ### コード署名ポリシー（Code signing policy）
 
-Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+現在のリリースはコード署名されていません。
 
-現在のリリースは未署名です（SignPath Foundation に申請予定）。
-
-署名の対象・役割・プライバシーポリシーは [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) を参照してください。
+将来コード署名する場合の方針（署名の対象・役割）とプライバシーポリシーは [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) を参照してください。
 
 ### ライセンス
 
@@ -301,11 +299,9 @@ GlassMonitor does not connect to the network and does not collect or send any da
 
 ### Code signing policy
 
-Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
+Current releases are not code signed.
 
-Current releases are unsigned (an application to SignPath Foundation is planned).
-
-See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) for what is signed, team roles and the privacy policy.
+See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) for the policy that applies if releases are code signed in the future (what gets signed, team roles) and for the privacy policy.
 
 ### License
 

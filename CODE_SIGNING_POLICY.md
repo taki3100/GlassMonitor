@@ -1,8 +1,8 @@
 # Code signing policy
 
-Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org)
-
 [日本語](#コード署名ポリシー日本語) | English
+
+Current releases of GlassMonitor are not code signed. This document describes the policy that applies if releases are code signed in the future (what gets signed, team roles), and the privacy policy.
 
 ## Team roles
 
@@ -26,7 +26,7 @@ All team members use multi-factor authentication (MFA) for GitHub and SignPath.
 - Every signing request is approved manually by an approver.
 - Third-party components (LibreHardwareMonitorLib and its dependencies, the .NET runtime) are shipped unchanged and are **not** signed with this project's certificate. See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 - Signed files carry the product name `GlassMonitor` and the release version.
-- Releases published before the project was accepted by SignPath Foundation are unsigned.
+- Releases published before code signing is introduced are unsigned.
 
 ## Privacy policy
 
@@ -47,7 +47,7 @@ GlassMonitor does not change system settings on its own. The only exception is t
 
 ## コード署名ポリシー（日本語）
 
-コード署名は [SignPath.io](https://about.signpath.io) により無償で提供され、証明書は [SignPath Foundation](https://signpath.org) が発行しています。
+現在の GlassMonitor のリリースはコード署名されていません。このページは、将来リリースにコード署名する場合の方針（署名の対象・役割）と、プライバシーポリシーをまとめたものです。
 
 ### 役割
 
@@ -71,7 +71,7 @@ GlassMonitor は 1 人で開発しており、すべての役割を [taki3100](h
 - 署名リクエストは承認者が毎回手動で承認します。
 - サードパーティのコンポーネント（LibreHardwareMonitorLib とその依存ライブラリ、.NET ランタイム）は変更せずに同梱し、このプロジェクトの証明書では署名しません。
 - 署名するファイルの製品名は `GlassMonitor`、バージョンはリリースのバージョンです。
-- SignPath Foundation に承認される前のリリースは署名されていません。
+- コード署名を導入する前のリリースは署名されていません。
 
 ### プライバシーポリシー
 
